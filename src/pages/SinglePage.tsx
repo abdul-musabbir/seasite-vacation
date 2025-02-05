@@ -2,6 +2,7 @@ import { MapPin } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import BookingForm from "../components/BookingForm";
+import Footer from "../components/Footer";
 import ImageGallery from "../components/ImageGallery";
 import ImageSlider from "../components/ImageSlider";
 import PropertyFeatures from "../components/PropertyFeatures";
@@ -221,11 +222,13 @@ function SinglePage() {
           {/* Right Booking Form */}
           <div className="lg:w-[400px] flex-shrink-0">
             <div className="sticky top-8">
-              <BookingForm />
+              <BookingForm data={data} />
             </div>
           </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }

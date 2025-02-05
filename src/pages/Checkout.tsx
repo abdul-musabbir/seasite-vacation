@@ -3,24 +3,40 @@ import {
   Calendar,
   ChevronRight,
   Clock,
-  Coffee,
   Download,
   Hotel,
   MapPin,
-  ParkingMeter as Parking,
   Printer,
   Shield,
   Star,
   User,
-  Wifi,
 } from "lucide-react";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
+import Footer from "../components/Footer";
 
 function Checkout() {
   const [step, setStep] = useState(1);
   const [showInvoice, setShowInvoice] = useState(false);
   const invoiceRef = useRef(null);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { data } = location.state || {};
+  const [showDropDown, setShowDropDown] = useState(false);
+  useEffect(() => {
+    // This will run when the component mounts
+    window.scrollTo(0, 0);
+  }, []);
+  // Redirect if no item is found
+  useEffect(() => {
+    if (!data) {
+      navigate("/", { replace: true }); // Replaces history to prevent going back
+    }
+  }, [data, navigate]);
+
+  if (!data) return null; // Prevents rendering before redirection
 
   const bookingDetails = {
     hotelName: "LuxStay Grand Resort",
@@ -240,10 +256,13 @@ function Checkout() {
                   <label className="block text-sm font-medium text-gray-700">
                     First Name
                   </label>
+
                   <input
                     type="text"
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white"
+                    id="first_name"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none"
                     placeholder="John"
+                    required
                   />
                 </div>
                 <div>
@@ -252,8 +271,10 @@ function Checkout() {
                   </label>
                   <input
                     type="text"
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white"
+                    id="last_name"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none"
                     placeholder="Doe"
+                    required
                   />
                 </div>
                 <div>
@@ -262,8 +283,10 @@ function Checkout() {
                   </label>
                   <input
                     type="email"
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white"
-                    placeholder="john@example.com"
+                    id="email"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none"
+                    placeholder="hello@gmail.com"
+                    required
                   />
                 </div>
                 <div>
@@ -271,9 +294,11 @@ function Checkout() {
                     Phone
                   </label>
                   <input
-                    type="tel"
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white"
-                    placeholder="+1 (555) 000-0000"
+                    type="number"
+                    id="phone_number"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none"
+                    placeholder="type your phone number"
+                    required
                   />
                 </div>
               </div>
@@ -284,9 +309,11 @@ function Checkout() {
                 Special Requests
               </h3>
               <textarea
-                className="w-full h-24 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white"
-                placeholder="Any special requests or preferences?"
-              />
+                id="message"
+                rows={4}
+                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                placeholder="Write your thoughts here..."
+              ></textarea>
             </div>
 
             <div className="pt-6">
@@ -388,18 +415,96 @@ function Checkout() {
       {showInvoice && <Invoice ref={invoiceRef} />}
 
       {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Hotel className="w-8 h-8 text-blue-600" />
-            <span className="text-xl font-semibold text-gray-900">LuxStay</span>
+      <nav className="bg-white sticky w-full z-20 top-0 start-0 border-b border-gray-200 ">
+        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+          <a
+            href="https://flowbite.com/"
+            className="flex items-center space-x-3 rtl:space-x-reverse"
+          >
+            <img
+              src="https://flowbite.com/docs/images/logo.svg"
+              className="h-8"
+              alt="Flowbite Logo"
+            />
+            <span className="self-center text-2xl font-semibold whitespace-nowrap ">
+              Flowbite
+            </span>
+          </a>
+          <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+            <button
+              type="button"
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center "
+            >
+              Get started
+            </button>
+            <button
+              onClick={() => setShowDropDown((prev) => !prev)}
+              type="button"
+              className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+              aria-controls="navbar-sticky"
+              aria-expanded="false"
+            >
+              <span className="sr-only">Open main menu</span>
+              <svg
+                className="w-5 h-5"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 17 14"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M1 1h15M1 7h15M1 13h15"
+                />
+              </svg>
+            </button>
           </div>
-          <div className="flex items-center space-x-2">
-            <Shield className="w-5 h-5 text-green-600" />
-            <span className="text-sm text-gray-600">Secure Booking</span>
+          <div
+            className={`items-center justify-between absolute md:static md:top-0 md:left-0 md:px-0 top-20 left-0 px-3 sm:px-10 w-full md:flex md:w-auto md:order-1 ${
+              showDropDown ? "block" : "hidden"
+            }`}
+          >
+            <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white ">
+              <li>
+                <a
+                  href="#"
+                  className="block py-2 px-3 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0"
+                  aria-current="page"
+                >
+                  Home
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0"
+                >
+                  House
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 "
+                >
+                  Features
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 "
+                >
+                  How To Book
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
-      </header>
+      </nav>
 
       <main className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -453,12 +558,12 @@ function Checkout() {
 
               <div className="relative">
                 <img
-                  src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=500"
+                  src={data.feature_image}
                   alt="Luxury Hotel Room"
                   className="w-full h-48 object-cover rounded-lg"
                 />
                 <div className="absolute top-0 right-0 bg-blue-600 text-white px-3 py-1 rounded-bl-lg rounded-tr-lg">
-                  Deluxe Suite
+                  {data.title}
                 </div>
                 <div className="absolute bottom-2 left-2 flex items-center space-x-1">
                   <Star className="w-4 h-4 text-yellow-400 fill-current" />
@@ -472,7 +577,7 @@ function Checkout() {
               <div className="space-y-4">
                 <div className="flex items-center text-gray-600">
                   <MapPin className="w-5 h-5 mr-2" />
-                  <span>{bookingDetails.location}</span>
+                  <span>{data.name}</span>
                 </div>
                 <div className="flex items-center text-gray-600">
                   <Calendar className="w-5 h-5 mr-2" />
@@ -487,26 +592,6 @@ function Checkout() {
                 <div className="flex items-center text-gray-600">
                   <User className="w-5 h-5 mr-2" />
                   <span>{bookingDetails.guests} Adults</span>
-                </div>
-              </div>
-
-              <div className="border-t border-dashed pt-4">
-                <h3 className="font-medium text-gray-900 mb-2">
-                  Included Amenities
-                </h3>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="flex items-center text-sm text-gray-600">
-                    <Wifi className="w-4 h-4 mr-2" />
-                    <span>Free Wi-Fi</span>
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <Coffee className="w-4 h-4 mr-2" />
-                    <span>Breakfast</span>
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <Parking className="w-4 h-4 mr-2" />
-                    <span>Parking</span>
-                  </div>
                 </div>
               </div>
 
@@ -553,6 +638,8 @@ function Checkout() {
           </div>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 }

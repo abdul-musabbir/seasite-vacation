@@ -12,7 +12,7 @@ import {
   PricingDetails,
 } from "../utils/pricing";
 
-export default function BookingForm() {
+export default function BookingForm({ data }) {
   const [showCheckInCalendar, setShowCheckInCalendar] = useState(false);
   const [showCheckOutCalendar, setShowCheckOutCalendar] = useState(false);
   const [checkIn, setCheckIn] = useState<Date | null>(null);
@@ -94,10 +94,8 @@ export default function BookingForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const item = {
-      name: "hello",
-    };
-    navigate("/checkout", { state: { item } });
+
+    navigate("/checkout", { state: { data } });
   };
 
   return (
