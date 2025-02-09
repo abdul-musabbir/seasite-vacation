@@ -2,7 +2,7 @@
 import { MapPin } from "lucide-react";
 import { lazy, memo, Suspense, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Header from "../components/Header";
+import Headers from "../components/Headers";
 import Preloader from "../components/Preloader";
 import { GetData } from "../lib/getSinglePageContent";
 import { Listing } from "../utils/types";
@@ -45,7 +45,7 @@ function SinglePage() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
 
-      <Header />
+      <Headers />
 
       {/* Image Slider */}
       <Suspense fallback={<Preloader />}>

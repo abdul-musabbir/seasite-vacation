@@ -19,13 +19,13 @@ const TesnimonialsSection = React.lazy(
   () => import("./components/TesnimonialsSection")
 );
 const Footer = React.lazy(() => import("./components/Footer"));
-const Header = React.lazy(() => import("./components/Header"));
+const Headers = React.lazy(() => import("./components/Headers"));
 
 function App() {
   return (
     <div className="min-h-screen">
       <Suspense fallback={<div className="loading-spinner">Loading...</div>}>
-        <Header />
+        <Headers />
         <HeroSection />
         <OurFeaturedTours />
         <FacilitiesSection />

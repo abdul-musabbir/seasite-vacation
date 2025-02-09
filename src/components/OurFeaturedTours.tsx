@@ -7,7 +7,7 @@ type GetPriceLabel = (
   priceType: string,
   price: number,
   minStay: number
-) => string;
+) => string | JSX.Element;
 export default function OurFeaturedTours() {
   const [ourFeaturedData, setOurFeaturedData] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true); // Loading state to handle component loading
@@ -46,13 +46,20 @@ export default function OurFeaturedTours() {
 
   const getPriceLabel: GetPriceLabel = useCallback(
     (priceType: string, price: number, minStay: number) => {
-      let priceLabel = "";
+      let priceLabel;
 
       if (priceType === "normal") {
         if (minStay === 7) {
           priceLabel = `$${price.toFixed(2)} per week`;
         } else {
-          priceLabel = `$${price.toFixed(2)} per night`;
+          priceLabel = (
+            <span>
+              <span className="text-2xl font-bold">${price.toFixed(2)}</span>{" "}
+              <span className="font-medium text-gray-600">/ night</span>
+            </span>
+          );
+
+          // return priceLabel;
         }
       } else {
         if (minStay === 7) {
@@ -170,7 +177,7 @@ export default function OurFeaturedTours() {
                 </div>
                 <div className="flex justify-between items-center">
                   <div>
-                    <span className="text-2xl font-bold">
+                    <span className="">
                       {getPriceLabel(
                         item.price_type,
                         Number(item.price),

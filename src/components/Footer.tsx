@@ -132,7 +132,7 @@ const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 pt-6 mt-6">
-          <div className="flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
+          <div className="flex flex-col space-y-5 md:space-y-0 md:flex-row justify-between items-center text-sm text-gray-400">
             <p>
               © 2025 Seaside Beach Vacations. All rights reserved. Proudly
               Develop by{" "}

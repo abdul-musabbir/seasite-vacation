@@ -1,14 +1,12 @@
 import { addDays, format } from "date-fns";
 import { Calendar, Info, Users } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { useNavigate } from "react-router-dom";
 import {
   calculatePricing,
   getMinimumStayDays,
-  isMemorialDayWeekend,
-  isPeakSeason,
   PricingDetails,
 } from "../utils/pricingList";
 import { Listing } from "../utils/types";
@@ -89,17 +87,17 @@ export default function BookingForm({ data }: { data: Listing }) {
     }).format(amount);
   };
 
-  const getCurrentRate = (date: Date | null = null) => {
-    if (date) {
-      if (isMemorialDayWeekend(date)) {
-        return 2000;
-      }
-      if (isPeakSeason(date)) {
-        return 1000;
-      }
-    }
-    return 700;
-  };
+  // const getCurrentRate = (date: Date | null = null) => {
+  //   if (date) {
+  //     if (isMemorialDayWeekend(date)) {
+  //       return 2000;
+  //     }
+  //     if (isPeakSeason(date)) {
+  //       return 1000;
+  //     }
+  //   }
+  //   return 700;
+  // };
 
   const handleSubmit = (e): void => {
     e.preventDefault();
@@ -126,6 +124,43 @@ export default function BookingForm({ data }: { data: Listing }) {
   ): number {
     return Number(bookingCost) + Number(cleaningFee) + Number(utilityFee);
   }
+  type GetPriceLabel = (
+    priceType: string,
+    price: number,
+    minStay: number
+  ) => string | JSX.Element;
+
+  const getPriceLabel: GetPriceLabel = useCallback(
+    (priceType: string, price: number, minStay: number) => {
+      let priceLabel;
+
+      if (priceType === "normal") {
+        if (minStay === 7) {
+          priceLabel = `$${price.toFixed(2)} per week`;
+        } else {
+          priceLabel = (
+            <span>
+              <span className="text-2xl font-bold">${price.toFixed(2)}</span>{" "}
+              <span className="font-medium text-gray-600">/ night</span>
+            </span>
+          );
+
+          // return priceLabel;
+        }
+      } else {
+        if (minStay === 7) {
+          priceLabel = `$${price.toFixed(2)} per week`;
+        } else if (minStay > 1) {
+          priceLabel = `$${price.toFixed(2)} per ${minStay} nights`;
+        } else {
+          priceLabel = `$${price.toFixed(2)} per night`;
+        }
+      }
+
+      return priceLabel;
+    },
+    []
+  );
 
   return (
     <form
@@ -133,14 +168,22 @@ export default function BookingForm({ data }: { data: Listing }) {
       className="bg-white p-6 rounded-lg shadow-lg space-y-6"
     >
       <div className="space-y-2">
-        <h3 className="text-xl font-semibold">Book Your Stay</h3>
-        <p className="text-gray-600">
+        {/* <p className="text-gray-600">
           From {formatPrice(getCurrentRate(checkIn))} per night
           {checkIn && isPeakSeason(checkIn) && " (Peak Season)"}
           {checkIn &&
-            isMemorialDayWeekend(checkIn) &&
-            " (Memorial Day Weekend)"}
+          isMemorialDayWeekend(checkIn) &&
+          " (Memorial Day Weekend)"}
+          </p> */}
+
+        <p>
+          {getPriceLabel(
+            data.price_type,
+            Number(data.price),
+            Number(data.minimum_stay)
+          )}
         </p>
+        <h3 className="text-xl font-semibold">Book Your Stay</h3>
       </div>
 
       {/* Date Selection */}
