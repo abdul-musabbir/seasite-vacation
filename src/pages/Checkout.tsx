@@ -16,9 +16,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 import Footer from "../components/Footer";
-import Header from "../components/Header";
 
 import { useCallback } from "react";
+import Headers from "../components/Headers";
 function Checkout() {
   const [step, setStep] = useState(1);
   const [showInvoice, setShowInvoice] = useState(false);
@@ -543,7 +543,7 @@ function Checkout() {
       {showInvoice && <Invoice ref={invoiceRef} />}
 
       {/* Header */}
-      <Header />
+      <Headers />
 
       <main className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

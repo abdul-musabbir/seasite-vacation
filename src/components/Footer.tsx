@@ -1,5 +1,7 @@
 import { Facebook, Instagram, Phone, Twitter, Youtube } from "lucide-react";
 
+import { Link } from "react-router-dom";
+
 const Footer = () => {
   // const scrollToTop = () => {
   //   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -102,29 +104,32 @@ const Footer = () => {
             <h3 className="font-semibold mb-4">Contact Us</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
-                <a href="#" className="hover:text-amber-500">
-                  201-921-9969{" "}
+                <a href="tel:2019219969" className="hover:text-amber-500">
+                  201-921-9969
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-amber-500">
+                <a
+                  href="mailto:seasidebeachvacations@gmail.com"
+                  className="hover:text-amber-500"
+                >
                   seasidebeachvacations@gmail.com
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-amber-500">
+                <Link to="#" className="hover:text-amber-500">
                   23 Farragut Ave, Seaside Park NJ 08752
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-amber-500">
+                <Link to="#" className="hover:text-amber-500">
                   29 Farragut Ave, Seaside Park NJ 08752
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-amber-500">
+                <Link to="#" className="hover:text-amber-500">
                   30 Farragut Ave, Seaside Park, NJ
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
