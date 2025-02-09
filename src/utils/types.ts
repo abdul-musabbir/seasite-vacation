@@ -1,33 +1,29 @@
 export interface Listing {
-  id: string;
-  listing_id: string;
-  user_id: string;
+  id: number;
   title: string;
-  slug: string;
-  name: string;
   description: string;
-  excerpt: string | null;
   feature_image: string;
-  gallery_images: string;
-  num_bedrooms: string;
-  num_bathrooms: string;
-  num_kitchens: string;
-  num_sleeps: string;
-  standard_price: string;
-  standard_minimum_stay: string;
-  peak_season_price: string;
-  peak_season_minimum_stay: string;
-  memorial_day_price: string;
-  memorial_day_minimum_stay: string;
-  security_deposit: string;
-  cleaning_fees: string;
-  utility_fees: string;
-  status: string;
-  taxonomy_id: string;
-  taxonomy_type: string;
-  created_at: string;
-  updated_at: string;
-  created_by: string;
-  deleted: string;
-  deleted_at: string | null;
+  location: string;
+  slug: string;
+  meta: {
+    cleaning_fees: number;
+    labor_day_minimum_stay: number;
+    labor_day_price: number;
+    memorial_day_minimum_stay: number;
+    memorial_day_price: number;
+    normal_minimum_stay: number;
+    normal_price: number;
+    num_bathrooms: number;
+    num_bedrooms: number;
+    num_kitchens: number;
+    num_sleeps: number;
+    peak_season_minimum_stay: number;
+    peak_season_price: number;
+    peak_season_start: string; // Can be converted to Date if needed
+    security_deposit: number;
+    utility_fees: number;
+  };
+  price: number;
+  price_type: string;
+  minimum_stay: number;
 }

@@ -4,24 +4,18 @@ import { useEffect, useRef, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { useNavigate } from "react-router-dom";
-import {
-  calculatePricing,
-  getMinimumStayDays,
-  isMemorialDayWeekend,
-  isPeakSeason,
-  PricingDetails,
-} from "../utils/pricingList";
-import { Listing } from "../utils/types";
+import { calculatePricing, getMinimumStayDays } from "../utils/pricing";
 
-export default function BookingForm({ data }: { data: Listing }) {
+export default function BookingForm({ data }) {
   const [showCheckInCalendar, setShowCheckInCalendar] = useState(false);
   const [showCheckOutCalendar, setShowCheckOutCalendar] = useState(false);
   const [checkIn, setCheckIn] = useState<Date | null>(null);
   const [checkOut, setCheckOut] = useState<Date | null>(null);
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
-  const [pricing, setPricing] = useState<PricingDetails | null>(null);
+  const [pricing, setPricing] = useState<any | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const checkInCalendarRef = useRef<HTMLDivElement>(null);
   const checkOutCalendarRef = useRef<HTMLDivElement>(null);
 
@@ -54,15 +48,12 @@ export default function BookingForm({ data }: { data: Listing }) {
         checkOut,
         adults,
         children,
-        Number(data.meta.normal_price),
-        Number(data.meta.peak_season_price),
-        Number(data.meta.memorial_day_price),
-        Number(data.meta.peak_season_price)
+        data
       );
       setPricing(newPricing);
       setErrorMessage(newPricing.errorMessage || null);
     }
-  }, [checkIn, checkOut, adults, children]);
+  }, [checkIn, checkOut, adults, children, data]); // Add 'data' to dependencies
 
   const handleCheckInSelect = (date: Date | undefined) => {
     if (date) {
@@ -70,7 +61,7 @@ export default function BookingForm({ data }: { data: Listing }) {
       setShowCheckInCalendar(false);
 
       // Set default checkout date based on minimum stay
-      const minStayDays = getMinimumStayDays(date);
+      const minStayDays = getMinimumStayDays(date, data); // Pass data here to get dynamic minimum stay
       setCheckOut(addDays(date, minStayDays));
     }
   };
@@ -89,43 +80,12 @@ export default function BookingForm({ data }: { data: Listing }) {
     }).format(amount);
   };
 
-  const getCurrentRate = (date: Date | null = null) => {
-    if (date) {
-      if (isMemorialDayWeekend(date)) {
-        return 2000;
-      }
-      if (isPeakSeason(date)) {
-        return 1000;
-      }
-    }
-    return 700;
-  };
-
-  const handleSubmit = (e): void => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (pricing) {
-      const subtotalprice = pricing.subtotal;
-      navigate("/checkout", {
-        state: { data, checkIn, checkOut, adults, subtotalprice },
-      });
-    }
+    navigate("/checkout", { state: { data } });
   };
 
-  function GenerateGuest(sleeps: number) {
-    const count: number[] = [];
-    for (let i = 1; i <= sleeps; i++) {
-      count.push(i);
-    }
-    return count;
-  }
-
-  function GenerateTotalPrice(
-    bookingCost: number,
-    cleaningFee: number,
-    utilityFee: number
-  ): number {
-    return Number(bookingCost) + Number(cleaningFee) + Number(utilityFee);
-  }
+  const minStayDays = checkIn ? getMinimumStayDays(checkIn, data) : 0;
 
   return (
     <form
@@ -135,11 +95,7 @@ export default function BookingForm({ data }: { data: Listing }) {
       <div className="space-y-2">
         <h3 className="text-xl font-semibold">Book Your Stay</h3>
         <p className="text-gray-600">
-          From {formatPrice(getCurrentRate(checkIn))} per night
-          {checkIn && isPeakSeason(checkIn) && " (Peak Season)"}
-          {checkIn &&
-            isMemorialDayWeekend(checkIn) &&
-            " (Memorial Day Weekend)"}
+          From {formatPrice(pricing?.nightlyRate)} per night
         </p>
       </div>
 
@@ -204,7 +160,7 @@ export default function BookingForm({ data }: { data: Listing }) {
                 selected={checkOut}
                 onSelect={handleCheckOutSelect}
                 defaultMonth={checkOut || checkIn}
-                disabled={[{ before: addDays(checkIn, 1) }]}
+                disabled={[{ before: addDays(checkIn, minStayDays) }]} // Disable dates less than minimum stay
                 className="border rounded-lg"
               />
             </div>
@@ -234,11 +190,27 @@ export default function BookingForm({ data }: { data: Listing }) {
               <select
                 value={adults}
                 onChange={(e) => setAdults(Number(e.target.value))}
-                className="pl-10 w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                className="pl-10 w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
-                {GenerateGuest(Number(data.meta.num_sleeps)).map((num) => (
+                {[1, 2, 3, 4, 5, 6].map((num) => (
                   <option key={num} value={num}>
-                    {num} Guest{num !== 1 ? "s" : ""}
+                    {num} Adult{num !== 1 ? "s" : ""}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="flex-1">
+            <div className="relative">
+              <Users className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <select
+                value={children}
+                onChange={(e) => setChildren(Number(e.target.value))}
+                className="pl-10 w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                {[0, 1, 2, 3, 4].map((num) => (
+                  <option key={num} value={num}>
+                    {num} Child{num !== 1 ? "ren" : ""}
                   </option>
                 ))}
               </select>
@@ -249,37 +221,35 @@ export default function BookingForm({ data }: { data: Listing }) {
 
       {/* Fixed Fees */}
       <div className="space-y-2 border-t pt-4">
-        {pricing && (
-          <div className="flex justify-between text-gray-600">
-            <span>Booking Cost</span>
-            <span>{formatPrice(pricing.subtotal)}</span>
-          </div>
-        )}
         <div className="flex justify-between text-gray-600">
           <span>Cleaning fee</span>
-          <span>{data.meta.cleaning_fees}</span>
+          <span>{formatPrice(300)}</span>
         </div>
-
+        <div className="flex justify-between text-gray-600">
+          <span>Security deposit</span>
+          <span>{formatPrice(1000)}</span>
+        </div>
         <div className="flex justify-between text-gray-600">
           <span>Utility fee</span>
-          <span>{data.meta.utility_fees}</span>
+          <span>{formatPrice(150)}</span>
         </div>
       </div>
 
       {/* Dynamic Pricing Details */}
       {pricing && (
-        <div className="space-y-4">
-          <div className="flex justify-between font-semibold text-lg pt-2 border-t">
-            <span>Total</span>
-            <span>
-              {formatPrice(
-                GenerateTotalPrice(
-                  pricing.subtotal,
-                  data.meta.cleaning_fees,
-                  data.meta.utility_fees
-                )
-              )}
-            </span>
+        <div className="space-y-4 border-t pt-4">
+          <div className="space-y-2">
+            <div className="flex justify-between text-gray-600">
+              <span>
+                {formatPrice(pricing.nightlyRate)} × {pricing.numberOfNights}{" "}
+                nights
+              </span>
+              <span>{formatPrice(pricing.subtotal)}</span>
+            </div>
+            <div className="flex justify-between font-semibold text-lg pt-2 border-t">
+              <span>Total</span>
+              <span>{formatPrice(pricing.total)}</span>
+            </div>
           </div>
         </div>
       )}

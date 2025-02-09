@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface ImageSliderProps {
   images: { url: string; alt: string }[];
@@ -8,28 +8,37 @@ interface ImageSliderProps {
 export default function ImageSlider({ images }: ImageSliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  // Preload all images before rendering
+  useEffect(() => {
+    // Creating a new Image object and setting its source URL
+    images.forEach((image) => {
+      const img = new Image();
+      img.src = image.url; // Preload image by adding it to the browser cache
+    });
+  }, [images]);
+
   // Go to the next slide
-  const nextSlide = () => {
+  const nextSlide = useCallback(() => {
     setCurrentIndex((prevIndex) =>
       prevIndex === images.length - 1 ? 0 : prevIndex + 1
     );
-  };
+  }, [images.length]);
 
   // Go to the previous slide
-  const prevSlide = () => {
+  const prevSlide = useCallback(() => {
     setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? images.length - 1 : prevIndex - 1
     );
-  };
+  }, [images.length]);
 
-  // Setting up the interval to automatically change slides every 3 seconds
+  // Setting up the interval to automatically change slides every 4 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       nextSlide();
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [currentIndex, images.length]);
+  }, [images.length]);
 
   return (
     <div className="relative h-[600px] w-full overflow-hidden">
@@ -44,7 +53,7 @@ export default function ImageSlider({ images }: ImageSliderProps) {
             src={image.url}
             alt={image.alt}
             className="w-full h-full object-cover"
-            loading="lazy"
+            loading="eager" // Force eager loading to load all images at once
           />
         </div>
       ))}
@@ -65,7 +74,7 @@ export default function ImageSlider({ images }: ImageSliderProps) {
           <button
             key={index}
             onClick={() => setCurrentIndex(index)}
-            className={`w-2 h-2 rounded-full transition-colors ${
+            className={`w-2 h-2 rounded-full transition-colors animate-pulse ${
               index === currentIndex ? "bg-white" : "bg-white/50"
             }`}
           />

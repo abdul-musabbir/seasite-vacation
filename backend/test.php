@@ -1,6 +1,8 @@
 <?php
-require "config.php"; // Database connection file
 
+require "config.php"; // Database connection file
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
 // Set timezone to New Jersey
 date_default_timezone_set('America/New_York');
 
@@ -11,7 +13,7 @@ $currentDate = DateTime::createFromFormat('d-m-Y', $currentDateStr);
 // ------------------------------------------------------------------
 // 1. Fetch Listings & Their Meta Data from listings and listings_meta
 // ------------------------------------------------------------------
-$sql = "SELECT l.id, l.title, l.description, l.feature_image, 
+$sql = "SELECT l.id, l.title, l.description, l.feature_image, l.slug, 
                lm.meta_key, lm.meta_value
         FROM listings l
         LEFT JOIN listings_meta lm ON l.id = lm.listing_id
@@ -25,6 +27,7 @@ if ($result && $result->num_rows > 0) {
         $listings[$id]['title']         = $row['title'];
         $listings[$id]['description']   = $row['description'];
         $listings[$id]['feature_image'] = $row['feature_image'];
+        $listings[$id]['slug'] = $row['slug'];
         // Group meta data by key
         $listings[$id]['meta'][$row['meta_key']] = $row['meta_value'];
     }
@@ -126,193 +129,14 @@ function getPriceForListing($listing, $settings, $currentDate)
         'type' => 'normal'
     ];
 }
-?>
 
-<!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="UTF-8">
-    <title>Listings</title>
-    <style>
-        .listing-card {
-            border: 1px solid #ccc;
-            padding: 15px;
-            margin: 15px;
-            border-radius: 5px;
-            width: 300px;
-            float: left;
-        }
-
-        .listing-card img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .clear {
-            clear: both;
-        }
-    </style>
-</head>
-
-<body>
-    <?php
-// ------------------------------------------------------------------
-// 5. Display Each Listing Card with Dynamic Pricing and Location
-// ------------------------------------------------------------------
+// Fetch the pricing and add it to the listings
 foreach ($listings as $id => $listing) {
     $priceInfo = getPriceForListing($listing, $settings, $currentDate);
-    $price     = $priceInfo['price'];
-    $minStay   = $priceInfo['minimum_stay'];
-    $priceType = $priceInfo['type'];
-
-    // If the minimum stay is more than one night, show the total price for that many nights.
-    // Determine the price label based on the pricing type and minimum stay without multiplying the rate
-    if ($priceType === 'normal') {
-        // For normal pricing, always show the base database amount per night,
-        // except if the minimum stay is 7, then show "per week".
-        if ($minStay == 7) {
-            $priceLabel = "$" . number_format($price, 2) . " per week";
-        } else {
-            $priceLabel = "$" . number_format($price, 2) . " per night";
-        }
-    } else {
-        // For event pricing (peak, memorial, labor)
-        if ($minStay == 7) {
-            $priceLabel = "$" . number_format($price, 2) . " per week";
-        } elseif ($minStay > 1) {
-            $priceLabel = "$" . number_format($price, 2) . " per {$minStay} nights";
-        } else {
-            $priceLabel = "$" . number_format($price, 2) . " per night";
-        }
-    }
-
-    ?>
-
-    
-    <div class="listing-card">
-        <?php if (!empty($listing['feature_image'])): ?>
-        <img src="<?= htmlspecialchars($listing['feature_image']) ?>"
-            alt="<?= htmlspecialchars($listing['title']) ?>">
-        <?php endif; ?>
-        <h2><?= htmlspecialchars($listing['title']) ?>
-        </h2>
-        <?php if (isset($listing['location'])): ?>
-        <p><strong>Location:</strong>
-            <?= htmlspecialchars($listing['location']) ?>
-        </p>
-        <?php endif; ?>
-        <p><?= htmlspecialchars($listing['description']) ?>
-        </p>
-        <p><strong>Price:</strong> <?= $priceLabel ?></p>
-        <?php if ($priceType === 'normal'): ?>
-        <p><strong>Date:</strong>
-            <?= date('d F Y') ?>
-        </p>
-        <?php endif; ?>
-        <ul>
-            <li>Bedrooms:
-                <?= $listing['meta']['num_bedrooms'] ?? 'N/A' ?>
-            </li>
-            <li>Kitchens:
-                <?= $listing['meta']['num_kitchens'] ?? 'N/A' ?>
-            </li>
-            <li>Bathrooms:
-                <?= $listing['meta']['num_bathrooms'] ?? 'N/A' ?>
-            </li>
-            <li>Sleeps:
-                <?= $listing['meta']['num_sleeps'] ?? 'N/A' ?>
-            </li>
-            <li>Cleaning Fees:
-                $<?= htmlspecialchars($listing['meta']['cleaning_fees'] ?? 'N/A') ?>
-            </li>
-            <li>Security Deposit:
-                $<?= htmlspecialchars($listing['meta']['security_deposit'] ?? 'N/A') ?>
-            </li>
-            <li>Utility Fees:
-                $<?= htmlspecialchars($listing['meta']['utility_fees'] ?? 'N/A') ?>
-            </li>
-        </ul>
-    </div>
-    <?php } ?>
-    <div class="clear"></div>
-</body>
-
-</html>
-
-
-
-<?php
-// Include the configuration file to connect to your database.
-require "config.php";
-
-// Query to fetch all taxonomies that are not deleted.
-$sql = "SELECT * FROM taxonomies WHERE deleted = 0 ORDER BY taxonomy_type, name";
-$result = $conn->query($sql);
-
-$taxonomies = [];
-
-// Group taxonomies by their type (location, facility, feature, amenity, room_type).
-if ($result && $result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        // Group by taxonomy_type.
-        $taxonomies[$row['taxonomy_type']][] = $row;
-    }
+    $listings[$id]['price'] = $priceInfo['price'];
+    $listings[$id]['minimum_stay'] = $priceInfo['minimum_stay'];
+    $listings[$id]['price_type'] = $priceInfo['type'];
 }
 
-$conn->close();
-?>
-<!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="UTF-8">
-    <title>Taxonomies by Type</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-
-        .taxonomy-section {
-            margin-bottom: 30px;
-        }
-
-        .taxonomy-section h2 {
-            background-color: #f2f2f2;
-            padding: 10px;
-            border-left: 5px solid #0073aa;
-        }
-
-        .taxonomy-list {
-            list-style-type: none;
-            padding-left: 20px;
-        }
-
-        .taxonomy-list li {
-            padding: 3px 0;
-        }
-    </style>
-</head>
-
-<body>
-    <h1>Taxonomies by Type</h1>
-    <?php
-    // Loop through each taxonomy type and display its items.
-    foreach ($taxonomies as $type => $items) {
-        // Capitalize the first letter for the heading.
-        echo "<div class='taxonomy-section'>";
-        echo "<h2>" . ucfirst($type) . "</h2>";
-        echo "<ul class='taxonomy-list'>";
-        foreach ($items as $item) {
-            echo "<li>" . htmlspecialchars($item['name']) . "</li>";
-        }
-        echo "</ul>";
-        echo "</div>";
-    }
-?>
-</body>
-
-</html>
-
-
+// Return the listings with their prices as JSON
+echo json_encode(array_values($listings), JSON_PRETTY_PRINT);

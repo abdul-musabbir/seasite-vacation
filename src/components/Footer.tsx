@@ -1,9 +1,9 @@
 import { Facebook, Instagram, Phone, Twitter, Youtube } from "lucide-react";
 
 const Footer = () => {
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  // const scrollToTop = () => {
+  //   window.scrollTo({ top: 0, behavior: "smooth" });
+  // };
 
   return (
     <footer className="bg-black text-white pt-16 pb-6">

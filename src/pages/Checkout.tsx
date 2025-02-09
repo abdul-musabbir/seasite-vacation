@@ -1,30 +1,57 @@
+import axios from "axios";
+import { format } from "date-fns";
 import jsPDF from "jspdf";
 import {
   Calendar,
   ChevronRight,
-  Clock,
   Download,
   Hotel,
+  Loader,
   MapPin,
   Printer,
   Shield,
-  Star,
   User,
 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 import Footer from "../components/Footer";
+import Header from "../components/Header";
 
+import { useCallback } from "react";
 function Checkout() {
   const [step, setStep] = useState(1);
   const [showInvoice, setShowInvoice] = useState(false);
   const invoiceRef = useRef(null);
+  const [formDatas, setFormDatas] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+
+  const [reference_code, setRefernceCode] = useState<string>("");
+  const formatPrice = (amount: number) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    }).format(amount);
+  };
+
+  function GenerateTotalPrice(
+    bookingCost: number,
+    cleaningFee: number,
+    utilityFee: number
+  ): number {
+    return Number(bookingCost) + Number(cleaningFee) + Number(utilityFee);
+  }
 
   const location = useLocation();
   const navigate = useNavigate();
-  const { data } = location.state || {};
-  const [showDropDown, setShowDropDown] = useState(false);
+  const { data, checkIn, checkOut, adults, subtotalprice } =
+    location.state || {};
+  const [loader, setLoader] = useState<boolean>(false);
   useEffect(() => {
     // This will run when the component mounts
     window.scrollTo(0, 0);
@@ -37,6 +64,44 @@ function Checkout() {
   }, [data, navigate]);
 
   if (!data) return null; // Prevents rendering before redirection
+
+  const checkInDate = format(checkIn, "MMMM d, yyyy");
+  const checkOutDate = format(checkOut, "MMMM d, yyyy");
+
+  const generateBookingReference = useCallback(
+    (propertyName: string): string => {
+      // Define the property name mappings
+      const propertyCodes: { [key: string]: string } = {
+        "Beach Escape": "BE",
+        "Ocean Oasis": "OO",
+        "Unit 1": "U1",
+        "Unit 2": "U2",
+        "Unit 3": "U3",
+      };
+
+      // Get the current year and month (YYYYMM format)
+      const now = new Date();
+      const yearMonth =
+        now.getFullYear().toString() +
+        String(now.getMonth() + 1).padStart(2, "0");
+
+      // Generate a unique serial using timestamp + random number to avoid duplicates
+      const serial =
+        Date.now().toString().slice(-6) +
+        Math.floor(Math.random() * 100)
+          .toString()
+          .padStart(2, "0");
+
+      // Get the house code from the property mapping
+      const houseCode = propertyCodes[propertyName] || "XX"; // Default to "XX" if property not found
+
+      // Construct the reference number
+      return `SBV-${houseCode}-${yearMonth}-${serial}`;
+    },
+    []
+  );
+
+  const referenceCode = generateBookingReference(data.title);
 
   const bookingDetails = {
     hotelName: "LuxStay Grand Resort",
@@ -246,7 +311,7 @@ function Checkout() {
     switch (step) {
       case 1:
         return (
-          <div className="space-y-6">
+          <form onSubmit={checkOutPageSubmit} className="space-y-6">
             <div>
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
                 Guest Information
@@ -259,6 +324,12 @@ function Checkout() {
 
                   <input
                     type="text"
+                    onChange={(e) =>
+                      setFormDatas((prev) => ({
+                        ...prev,
+                        firstName: e.target.value,
+                      }))
+                    }
                     id="first_name"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none"
                     placeholder="John"
@@ -271,6 +342,12 @@ function Checkout() {
                   </label>
                   <input
                     type="text"
+                    onChange={(e) =>
+                      setFormDatas((prev) => ({
+                        ...prev,
+                        lastName: e.target.value,
+                      }))
+                    }
                     id="last_name"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none"
                     placeholder="Doe"
@@ -284,6 +361,12 @@ function Checkout() {
                   <input
                     type="email"
                     id="email"
+                    onChange={(e) =>
+                      setFormDatas((prev) => ({
+                        ...prev,
+                        email: e.target.value,
+                      }))
+                    }
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none"
                     placeholder="hello@gmail.com"
                     required
@@ -295,6 +378,12 @@ function Checkout() {
                   </label>
                   <input
                     type="number"
+                    onChange={(e) =>
+                      setFormDatas((prev) => ({
+                        ...prev,
+                        phone: e.target.value,
+                      }))
+                    }
                     id="phone_number"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none"
                     placeholder="type your phone number"
@@ -310,6 +399,12 @@ function Checkout() {
               </h3>
               <textarea
                 id="message"
+                onChange={(e) =>
+                  setFormDatas((prev) => ({
+                    ...prev,
+                    message: e.target.value,
+                  }))
+                }
                 rows={4}
                 className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 outline-none"
                 placeholder="Write your thoughts here..."
@@ -318,13 +413,17 @@ function Checkout() {
 
             <div className="pt-6">
               <button
-                onClick={() => setStep(2)}
-                className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                type="submit"
+                className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center"
               >
-                Complete Booking
+                {loader ? (
+                  <Loader className="animate-spin" />
+                ) : (
+                  "Complete Booking"
+                )}
               </button>
             </div>
-          </div>
+          </form>
         );
       case 2:
         return (
@@ -350,29 +449,20 @@ function Checkout() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
                   <div>
                     <p className="text-sm text-gray-600">Hotel</p>
-                    <p className="font-medium">{bookingDetails.hotelName}</p>
+                    <p className="font-medium">{data.title}</p>
                   </div>
-                  <div>
-                    <p className="text-sm text-gray-600">Room Type</p>
-                    <p className="font-medium">{bookingDetails.roomType}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-600">Location</p>
-                    <p className="font-medium">{bookingDetails.location}</p>
-                  </div>
+
                   <div>
                     <p className="text-sm text-gray-600">Guests</p>
-                    <p className="font-medium">
-                      {bookingDetails.guests} Adults
-                    </p>
+                    <p className="font-medium">{adults} Guest</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Check-in</p>
-                    <p className="font-medium">{bookingDetails.checkIn}</p>
+                    <p className="font-medium">{checkInDate}</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Check-out</p>
-                    <p className="font-medium">{bookingDetails.checkOut}</p>
+                    <p className="font-medium">{checkOutDate}</p>
                   </div>
                 </div>
               </div>
@@ -382,12 +472,12 @@ function Checkout() {
                   Booking Reference
                 </h3>
                 <p className="text-2xl font-mono text-blue-600 mb-4">
-                  {bookingDetails.bookingRef}
+                  {reference_code ? reference_code : "Loading..."}
                 </p>
-                <div className="text-sm text-gray-600 mb-6">
+                {/* <div className="text-sm text-gray-600 mb-6">
                   Keep this reference number handy for check-in
-                </div>
-                <div className="flex flex-col sm:flex-row gap-4">
+                </div> */}
+                {/* <div className="flex flex-col sm:flex-row gap-4">
                   <button
                     onClick={() => setShowInvoice(true)}
                     className="flex-1 flex items-center justify-center gap-2 bg-white border border-gray-300 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors"
@@ -402,7 +492,7 @@ function Checkout() {
                     <Download className="w-4 h-4" />
                     Download Invoice
                   </button>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -410,101 +500,50 @@ function Checkout() {
     }
   };
 
+  const checkOutPageSubmit = (e) => {
+    e.preventDefault();
+
+    if (
+      !formDatas.firstName ||
+      !formDatas.lastName ||
+      !formDatas.email ||
+      !formDatas.phone
+    ) {
+      console.log("Please fill in all fields");
+      return;
+    }
+
+    setLoader(true);
+    const listing_id = data.id;
+    axios
+      .post("http://localhost:5000/bookingform.php", {
+        data: {
+          ...formDatas,
+          listing_id,
+          checkInDate,
+          checkOutDate,
+          adults,
+          referenceCode,
+        },
+      })
+      .then((res) => {
+        setRefernceCode(res.data.reference_code);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoader(false);
+        setStep(2);
+      });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {showInvoice && <Invoice ref={invoiceRef} />}
 
       {/* Header */}
-      <nav className="bg-white sticky w-full z-20 top-0 start-0 border-b border-gray-200 ">
-        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-          <a
-            href="https://flowbite.com/"
-            className="flex items-center space-x-3 rtl:space-x-reverse"
-          >
-            <img
-              src="https://flowbite.com/docs/images/logo.svg"
-              className="h-8"
-              alt="Flowbite Logo"
-            />
-            <span className="self-center text-2xl font-semibold whitespace-nowrap ">
-              Flowbite
-            </span>
-          </a>
-          <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-            <button
-              type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center "
-            >
-              Get started
-            </button>
-            <button
-              onClick={() => setShowDropDown((prev) => !prev)}
-              type="button"
-              className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
-              aria-controls="navbar-sticky"
-              aria-expanded="false"
-            >
-              <span className="sr-only">Open main menu</span>
-              <svg
-                className="w-5 h-5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 17 14"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M1 1h15M1 7h15M1 13h15"
-                />
-              </svg>
-            </button>
-          </div>
-          <div
-            className={`items-center justify-between absolute md:static md:top-0 md:left-0 md:px-0 top-20 left-0 px-3 sm:px-10 w-full md:flex md:w-auto md:order-1 ${
-              showDropDown ? "block" : "hidden"
-            }`}
-          >
-            <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white ">
-              <li>
-                <a
-                  href="#"
-                  className="block py-2 px-3 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0"
-                  aria-current="page"
-                >
-                  Home
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0"
-                >
-                  House
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 "
-                >
-                  Features
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 "
-                >
-                  How To Book
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
+      <Header />
 
       <main className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -565,37 +604,27 @@ function Checkout() {
                 <div className="absolute top-0 right-0 bg-blue-600 text-white px-3 py-1 rounded-bl-lg rounded-tr-lg">
                   {data.title}
                 </div>
-                <div className="absolute bottom-2 left-2 flex items-center space-x-1">
-                  <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                  <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                  <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                  <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                  <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                </div>
               </div>
 
               <div className="space-y-4">
                 <div className="flex items-center text-gray-600">
                   <MapPin className="w-5 h-5 mr-2" />
-                  <span>{data.name}</span>
+                  <span>{data.location}</span>
                 </div>
                 <div className="flex items-center text-gray-600">
                   <Calendar className="w-5 h-5 mr-2" />
                   <span>
-                    {bookingDetails.checkIn} - {bookingDetails.checkOut}
+                    {checkInDate} - {checkOutDate}
                   </span>
                 </div>
-                <div className="flex items-center text-gray-600">
-                  <Clock className="w-5 h-5 mr-2" />
-                  <span>Check-in: 3:00 PM</span>
-                </div>
+
                 <div className="flex items-center text-gray-600">
                   <User className="w-5 h-5 mr-2" />
-                  <span>{bookingDetails.guests} Adults</span>
+                  <span>{adults} Guests</span>
                 </div>
               </div>
 
-              <div className="border-t pt-4">
+              {/* <div className="border-t pt-4">
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-gray-600">
@@ -624,13 +653,49 @@ function Checkout() {
                     </span>
                   </div>
                 </div>
+              </div> */}
+
+              <div className="space-y-2 border-t pt-4">
+                {subtotalprice && (
+                  <div className="flex justify-between text-gray-600">
+                    <span>Booking Cost</span>
+                    <span>{formatPrice(subtotalprice)}</span>
+                  </div>
+                )}
+                <div className="flex justify-between text-gray-600">
+                  <span>Cleaning fee</span>
+                  <span>{data.meta.cleaning_fees}</span>
+                </div>
+
+                <div className="flex justify-between text-gray-600">
+                  <span>Utility fee</span>
+                  <span>{data.meta.utility_fees}</span>
+                </div>
               </div>
+
+              {/* Dynamic Pricing Details */}
+              {subtotalprice && (
+                <div className="space-y-4">
+                  <div className="flex justify-between font-semibold text-lg pt-2 border-t">
+                    <span>Total</span>
+                    <span>
+                      {formatPrice(
+                        GenerateTotalPrice(
+                          subtotalprice,
+                          data.meta.cleaning_fees,
+                          data.meta.utility_fees
+                        )
+                      )}
+                    </span>
+                  </div>
+                </div>
+              )}
 
               <div className="bg-gray-50 p-4 rounded-lg">
                 <div className="flex items-start">
                   <Shield className="w-5 h-5 text-green-600 mt-0.5" />
                   <p className="ml-2 text-sm text-gray-600">
-                    Free cancellation until March 13, 2024.
+                    Pay secuirity deposit
                   </p>
                 </div>
               </div>

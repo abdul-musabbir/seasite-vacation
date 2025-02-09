@@ -1,6 +1,8 @@
 import {
   differenceInDays,
   differenceInWeeks,
+  getDay,
+  isSaturday,
   isValid,
   isWithinInterval,
   lastDayOfMonth,
@@ -24,6 +26,11 @@ const CLEANING_FEE = 300;
 const SECURITY_DEPOSIT = 1000;
 const UTILITY_FEE = 150;
 
+const BASE_NIGHTLY_RATE = 700;
+const PEAK_SEASON_NIGHTLY_RATE = 1000;
+const MEMORIAL_DAY_NIGHTLY_RATE = 2000;
+const PEAK_SEASON_WEEKLY_RATE = 7000;
+
 export function getPeakSeasonStartDate(year: number): Date {
   const juneLastDay = lastDayOfMonth(new Date(year, 5)); // 5 is June (0-based)
   const lastSaturday = startOfWeek(juneLastDay, { weekStartsOn: 6 }); // Find the last Saturday
@@ -37,6 +44,7 @@ export function getPeakSeasonStartDate(year: number): Date {
 }
 
 export function isMemorialDayWeekend(date: Date): boolean {
+  // Memorial Day is the last Monday in May
   const year = date.getFullYear();
   const mayLastDay = lastDayOfMonth(new Date(year, 4)); // 4 is May (0-based)
   const memorialDay = startOfWeek(mayLastDay, { weekStartsOn: 1 }); // Find the last Monday
@@ -60,22 +68,21 @@ export function isPeakSeason(date: Date): boolean {
   return isWithinInterval(date, { start: peakSeasonStart, end: peakSeasonEnd });
 }
 
-export function getMinimumStayDays(checkIn: Date, data: any): number {
+export function getMinimumStayDays(checkIn: Date): number {
   if (isMemorialDayWeekend(checkIn)) {
     return 3;
   }
   if (isPeakSeason(checkIn)) {
     return 7;
   }
-  return data?.meta["normal_minimum_stay"] ?? 2; // Use dynamic minimum stay from the database
+  return 2;
 }
 
 export function calculatePricing(
   checkIn: Date | null,
   checkOut: Date | null,
   adults: number,
-  children: number,
-  data: any
+  children: number
 ): PricingDetails {
   const baseResult: PricingDetails = {
     nightlyRate: 0,
@@ -101,20 +108,30 @@ export function calculatePricing(
 
   const numberOfNights = differenceInDays(checkOut, checkIn);
 
+  // Check Memorial Day Weekend booking rules
   if (isMemorialDayWeekend(checkIn)) {
-    const memorialPrice = data?.meta["memorial_day_price"] ?? 2000;
     if (numberOfNights < 3) {
       return {
         ...baseResult,
-        nightlyRate: memorialPrice,
+        nightlyRate: MEMORIAL_DAY_NIGHTLY_RATE,
         errorMessage: "Memorial Day Weekend requires a minimum 3-night stay",
       };
     }
-    const subtotal = memorialPrice * numberOfNights;
+    if (getDay(checkIn) !== 5) {
+      // 5 is Friday
+      return {
+        ...baseResult,
+        nightlyRate: MEMORIAL_DAY_NIGHTLY_RATE,
+        errorMessage: "Memorial Day Weekend bookings must start on Friday",
+      };
+    }
+    const nightlyRate = MEMORIAL_DAY_NIGHTLY_RATE;
+    const subtotal = nightlyRate * numberOfNights;
     const total = subtotal + CLEANING_FEE + SECURITY_DEPOSIT + UTILITY_FEE;
+
     return {
       ...baseResult,
-      nightlyRate: memorialPrice,
+      nightlyRate,
       numberOfNights,
       subtotal,
       total,
@@ -122,20 +139,47 @@ export function calculatePricing(
     };
   }
 
+  // Check Peak Season booking rules
   if (isPeakSeason(checkIn)) {
-    const peakPrice = data?.meta["peak_season_price"] ?? 1000;
     if (numberOfNights < 7) {
       return {
         ...baseResult,
-        nightlyRate: peakPrice,
+        nightlyRate: PEAK_SEASON_NIGHTLY_RATE,
         errorMessage: "Peak season requires a minimum 7-night stay",
       };
     }
-    const subtotal = peakPrice * numberOfNights;
+    if (!isSaturday(checkIn)) {
+      return {
+        ...baseResult,
+        nightlyRate: PEAK_SEASON_NIGHTLY_RATE,
+        errorMessage: "Peak season bookings must start on Saturday",
+      };
+    }
+    if (!isSaturday(checkOut)) {
+      return {
+        ...baseResult,
+        nightlyRate: PEAK_SEASON_NIGHTLY_RATE,
+        errorMessage: "Peak season bookings must be Saturday to Saturday",
+      };
+    }
+
+    const fullWeeks = Math.floor(numberOfNights / 7);
+    const remainingNights = numberOfNights % 7;
+
+    if (remainingNights > 0) {
+      return {
+        ...baseResult,
+        nightlyRate: PEAK_SEASON_NIGHTLY_RATE,
+        errorMessage: "Peak season bookings must be in full weeks",
+      };
+    }
+
+    const subtotal = fullWeeks * PEAK_SEASON_WEEKLY_RATE;
     const total = subtotal + CLEANING_FEE + SECURITY_DEPOSIT + UTILITY_FEE;
+
     return {
       ...baseResult,
-      nightlyRate: peakPrice,
+      nightlyRate: PEAK_SEASON_NIGHTLY_RATE,
       numberOfNights,
       subtotal,
       total,
@@ -143,13 +187,22 @@ export function calculatePricing(
     };
   }
 
-  const regularPrice = data?.meta["normal_price"] ?? 700;
-  const subtotal = regularPrice * numberOfNights;
+  // Regular season booking rules
+  if (numberOfNights < 2) {
+    return {
+      ...baseResult,
+      nightlyRate: BASE_NIGHTLY_RATE,
+      errorMessage: "Regular season requires a minimum 2-night stay",
+    };
+  }
+
+  const nightlyRate = BASE_NIGHTLY_RATE;
+  const subtotal = nightlyRate * numberOfNights;
   const total = subtotal + CLEANING_FEE + SECURITY_DEPOSIT + UTILITY_FEE;
 
   return {
     ...baseResult,
-    nightlyRate: regularPrice,
+    nightlyRate,
     numberOfNights,
     subtotal,
     total,
