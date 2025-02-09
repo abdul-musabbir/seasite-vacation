@@ -2,6 +2,7 @@
 import { MapPin } from "lucide-react";
 import { lazy, memo, Suspense, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import BookingCalendar from "../components/BookingCalendar";
 import Headers from "../components/Headers";
 import Preloader from "../components/Preloader";
 import { GetData } from "../lib/getSinglePageContent";
@@ -55,7 +56,7 @@ function SinglePage() {
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Left Content Area */}
-          <div className="flex-1 space-y-8">
+          <div className="flex-1 space-y-10">
             <div>
               <h1 className="text-4xl font-bold text-gray-900">{data.title}</h1>
               <div className="flex items-center gap-2 mt-2 text-gray-600">
@@ -75,6 +76,7 @@ function SinglePage() {
               </Suspense>
             </div>
 
+            <BookingCalendar />
             <div>
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">
                 Photo Gallery

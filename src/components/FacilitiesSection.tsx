@@ -1,12 +1,14 @@
 import {
   Car,
-  Coffee,
-  Dumbbell,
-  Menu,
+  Flame,
   MoreHorizontal,
-  School as Pool,
+  ShowerHead as Shower,
+  Trees,
+  Tv,
+  UtensilsCrossed,
+  WashingMachine as Washing,
   Wifi,
-  Zap,
+  Wind,
 } from "lucide-react";
 
 export default function FacilitiesSection() {
@@ -29,7 +31,7 @@ export default function FacilitiesSection() {
             {
               icon: (
                 <div className="w-12 h-12 flex items-center justify-center bg-emerald-100 rounded-xl mb-3">
-                  <Coffee className="w-6 h-6 text-emerald-500" />
+                  <Shower className="w-6 h-6 text-emerald-500" />
                 </div>
               ),
               name: "Outdoor shower for when you come off beach",
@@ -45,7 +47,7 @@ export default function FacilitiesSection() {
             {
               icon: (
                 <div className="w-12 h-12 flex items-center justify-center bg-emerald-100 rounded-xl mb-3">
-                  <Wifi className="w-6 h-6 text-emerald-500" />
+                  <Tv className="w-6 h-6 text-emerald-500" />
                 </div>
               ),
               name: "Smart TV",
@@ -53,7 +55,7 @@ export default function FacilitiesSection() {
             {
               icon: (
                 <div className="w-12 h-12 flex items-center justify-center bg-emerald-100 rounded-xl mb-3">
-                  <Menu className="w-6 h-6 text-emerald-500" />
+                  <UtensilsCrossed className="w-6 h-6 text-emerald-500" />
                 </div>
               ),
               name: "Full size kitchen fully equipped",
@@ -61,7 +63,7 @@ export default function FacilitiesSection() {
             {
               icon: (
                 <div className="w-12 h-12 flex items-center justify-center bg-emerald-100 rounded-xl mb-3">
-                  <Zap className="w-6 h-6 text-emerald-500" />
+                  <Trees className="w-6 h-6 text-emerald-500" />
                 </div>
               ),
               name: "Large back yard for play time",
@@ -69,7 +71,7 @@ export default function FacilitiesSection() {
             {
               icon: (
                 <div className="w-12 h-12 flex items-center justify-center bg-emerald-100 rounded-xl mb-3">
-                  <Pool className="w-6 h-6 text-emerald-500" />
+                  <Flame className="w-6 h-6 text-emerald-500" />
                 </div>
               ),
               name: "Fire pit for night time enjoyment",
@@ -77,7 +79,7 @@ export default function FacilitiesSection() {
             {
               icon: (
                 <div className="w-12 h-12 flex items-center justify-center bg-emerald-100 rounded-xl mb-3">
-                  <Dumbbell className="w-6 h-6 text-emerald-500" />
+                  <Wifi className="w-6 h-6 text-emerald-500" />
                 </div>
               ),
               name: "High-speed internet connection",
@@ -85,7 +87,7 @@ export default function FacilitiesSection() {
             {
               icon: (
                 <div className="w-12 h-12 flex items-center justify-center bg-emerald-100 rounded-xl mb-3">
-                  <MoreHorizontal className="w-6 h-6 text-emerald-500" />
+                  <Wind className="w-6 h-6 text-emerald-500" />
                 </div>
               ),
               name: "Brand new central air conditioning",
@@ -93,7 +95,7 @@ export default function FacilitiesSection() {
             {
               icon: (
                 <div className="w-12 h-12 flex items-center justify-center bg-emerald-100 rounded-xl mb-3">
-                  <MoreHorizontal className="w-6 h-6 text-emerald-500" />
+                  <Washing className="w-6 h-6 text-emerald-500" />
                 </div>
               ),
               name: "Washer and dryer available",
