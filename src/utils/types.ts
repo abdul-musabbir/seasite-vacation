@@ -26,4 +26,5 @@ export interface Listing {
   price: number;
   price_type: string;
   minimum_stay: number;
+  gallery_images: string;
 }

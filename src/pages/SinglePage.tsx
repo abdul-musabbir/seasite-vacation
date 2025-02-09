@@ -15,50 +15,6 @@ const ImageSlider = lazy(() => import("../components/ImageSlider"));
 const ImageGallery = lazy(() => import("../components/ImageGallery"));
 const PropertyFeatures = lazy(() => import("../components/PropertyFeatures"));
 
-// You can also consider using optimized image formats (like WebP)
-// in these arrays or within the lazy-loaded image components.
-const propertyImages = [
-  {
-    url: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6",
-    alt: "Luxury beach house exterior",
-  },
-  {
-    url: "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6",
-    alt: "Modern living room with ocean view",
-  },
-  {
-    url: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750",
-    alt: "Stunning beachfront property",
-  },
-];
-
-const galleryImages = [
-  {
-    url: "https://images.unsplash.com/photo-1484154218962-a197022b5858",
-    alt: "Kitchen",
-  },
-  {
-    url: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af",
-    alt: "Master bedroom",
-  },
-  {
-    url: "https://images.unsplash.com/photo-1507652313519-d4e9174996dd",
-    alt: "Bathroom",
-  },
-  {
-    url: "https://images.unsplash.com/photo-1510798831971-661eb04b3739",
-    alt: "Backyard",
-  },
-  {
-    url: "https://images.unsplash.com/photo-1484154218962-a197022b5858",
-    alt: "Dining area",
-  },
-  {
-    url: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af",
-    alt: "Second bedroom",
-  },
-];
-
 function SinglePage() {
   const { id } = useParams();
   const [data, setData] = useState<Listing | null>(null);
@@ -93,7 +49,7 @@ function SinglePage() {
 
       {/* Image Slider */}
       <Suspense fallback={<Preloader />}>
-        <ImageSlider images={propertyImages} />
+        <ImageSlider images={JSON.parse(data.gallery_images)} />
       </Suspense>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -124,7 +80,7 @@ function SinglePage() {
                 Photo Gallery
               </h2>
               <Suspense fallback={<div>Loading gallery...</div>}>
-                <ImageGallery images={galleryImages} />
+                <ImageGallery images={JSON.parse(data.gallery_images)} />
               </Suspense>
             </div>
 
