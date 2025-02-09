@@ -3,6 +3,7 @@ import { MapPin } from "lucide-react";
 import { lazy, memo, Suspense, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "../components/Header";
+import Preloader from "../components/Preloader";
 import { GetData } from "../lib/getSinglePageContent";
 import { Listing } from "../utils/types";
 
@@ -81,7 +82,7 @@ function SinglePage() {
   }, []);
 
   if (!data) {
-    return <div>Loading listing data...</div>;
+    return <Preloader />;
   }
 
   return (
@@ -91,7 +92,7 @@ function SinglePage() {
       <Header />
 
       {/* Image Slider */}
-      <Suspense fallback={<div>Loading ...</div>}>
+      <Suspense fallback={<Preloader />}>
         <ImageSlider images={propertyImages} />
       </Suspense>
 
