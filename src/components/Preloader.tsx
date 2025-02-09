@@ -23,7 +23,7 @@ export default function Preloader() {
         <div className="hotel-loader" />
         <div className="space-y-2">
           <h2 className="text-2xl font-bold text-gray-900">
-            Welcome to Luxury Stays
+            Welcome to Seaside Beatch Vacations
           </h2>
           <p className="loading-text text-gray-600">
             Preparing your perfect getaway...

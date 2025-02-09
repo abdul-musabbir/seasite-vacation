@@ -1,19 +1,29 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
+import { GetData } from "../lib/getSinglePageContent";
 
-interface ImageSliderProps {
-  images: { url: string; alt: string }[];
-}
-
-export default function ImageSlider({ images }: ImageSliderProps) {
+export default function ImageSlider() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [images, setImages] = useState([]);
 
+  const fetchData = useCallback(async () => {
+    try {
+      const image = await GetData();
+      setImages(JSON.parse(image[3].gallery_images).images);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
   // Preload all images before rendering
   useEffect(() => {
     // Creating a new Image object and setting its source URL
     images.forEach((image) => {
       const img = new Image();
-      img.src = image.url; // Preload image by adding it to the browser cache
+      img.src = image; // Preload image by adding it to the browser cache
     });
   }, [images]);
 
@@ -38,7 +48,7 @@ export default function ImageSlider({ images }: ImageSliderProps) {
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [images.length]);
+  }, [images.length, nextSlide]);
 
   return (
     <div className="relative h-[600px] w-full overflow-hidden">
@@ -50,8 +60,8 @@ export default function ImageSlider({ images }: ImageSliderProps) {
           }`}
         >
           <img
-            src={image.url}
-            alt={image.alt}
+            src={image}
+            alt={image}
             className="w-full h-full object-cover"
             loading="eager" // Force eager loading to load all images at once
           />

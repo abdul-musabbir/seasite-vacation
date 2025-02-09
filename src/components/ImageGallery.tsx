@@ -1,27 +1,27 @@
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
+import { GetData } from "../lib/getSinglePageContent";
 
-interface ImageGalleryProps {
-  images: { url: string; alt: string }[];
-}
+// interface ImageGalleryProps {
+//   images: { url: string; alt: string }[];
+// }
 
-export default function ImageGallery({ images }: ImageGalleryProps) {
+export default function ImageGallery() {
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
-
+  const [images, setImages] = useState([]);
   // Function to preload all images at once
   const preloadImages = () => {
     const imagePromises: Promise<void>[] = images.map((image) => {
       return new Promise<void>((resolve, reject) => {
         const img = new Image();
-        img.src = image.url;
+        img.src = image;
         img.onload = () => resolve();
         img.onerror = () => {
-          setFailedImages((prev) => new Set([...prev, image.url]));
-          reject(`Failed to load image: ${image.url}`);
+          setFailedImages((prev) => new Set([...prev, image]));
+          reject(`Failed to load image: ${image}`);
         };
-        img.fetchPriority = "high"; // Make sure these are loaded as soon as possible
       });
     });
 
@@ -38,6 +38,19 @@ export default function ImageGallery({ images }: ImageGalleryProps) {
   useEffect(() => {
     preloadImages();
   }, [images]);
+
+  const fetchData = useCallback(async () => {
+    try {
+      const image = await GetData();
+      setImages(image);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   // Handle next image in gallery
   const handleNext = useCallback(() => {
@@ -102,14 +115,14 @@ export default function ImageGallery({ images }: ImageGalleryProps) {
             className="group aspect-square cursor-pointer overflow-hidden rounded-lg bg-gray-100 transform-gpu"
             onClick={() => setSelectedImage(index)}
           >
-            {failedImages.has(image.url) ? (
+            {failedImages.has(image) ? (
               <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-500">
                 <span className="text-sm">Failed to load image</span>
               </div>
             ) : (
               <img
-                src={image.url}
-                alt={image.alt}
+                src={image}
+                alt={image}
                 loading="eager" // Ensures image is loaded immediately
                 fetchPriority="high" // High priority for faster loading
                 className="w-full h-full object-cover transition-transform duration-300 will-change-transform
@@ -121,7 +134,7 @@ export default function ImageGallery({ images }: ImageGalleryProps) {
       </div>
 
       {selectedImage !== null &&
-        !failedImages.has(images[selectedImage]?.url) && ( // Optional chaining for selectedImage
+        !failedImages.has(images[selectedImage]) && ( // Optional chaining for selectedImage
           <div
             className="fixed inset-0 bg-black/95 z-50 backdrop-blur-sm"
             onClick={(e) => {
@@ -155,13 +168,12 @@ export default function ImageGallery({ images }: ImageGalleryProps) {
 
               <div className="relative max-w-[95vw] sm:max-w-[90vw] max-h-[90vh]">
                 <img
-                  src={images[selectedImage]?.url} // Optional chaining for selectedImage
-                  alt={images[selectedImage]?.alt} // Optional chaining for selectedImage
+                  src={images[selectedImage]} // Optional chaining for selectedImage
+                  alt={images[selectedImage]} // Optional chaining for selectedImage
                   className="object-contain w-full h-full max-h-[90vh] animate-fadeIn transform-gpu"
                 />
                 <p className="absolute bottom-0 left-0 right-0 text-center text-white/80 py-2 sm:py-4 bg-gradient-to-t from-black/50 to-transparent text-sm sm:text-base">
-                  {images[selectedImage]?.alt} // Optional chaining for
-                  selectedImage
+                  {images[selectedImage]} // Optional chaining for selectedImage
                 </p>
               </div>
             </div>

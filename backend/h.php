@@ -15,7 +15,7 @@ $currentDate = DateTime::createFromFormat('d-m-Y', $currentDateStr);
 // ------------------------------------------------------------------
 // 1. Fetch Listings & Their Meta Data from listings and listings_meta
 // ------------------------------------------------------------------
-$sql = "SELECT l.id, l.title, l.description, l.feature_image, l.slug, 
+$sql = "SELECT l.id, l.title, l.description, l.gallery_images, l.feature_image, l.slug, 
                lm.meta_key, lm.meta_value
         FROM listings l
         LEFT JOIN listings_meta lm ON l.id = lm.listing_id
@@ -34,6 +34,7 @@ if ($result->num_rows > 0) {
         $listings[$id]['title'] = $row['title'];
         $listings[$id]['description'] = $row['description'];
         $listings[$id]['feature_image'] = $row['feature_image'];
+        $listings[$id]['gallery_images'] = $row['gallery_images'];
         $listings[$id]['slug'] = $row['slug'];
         // Group meta data by key
         $listings[$id]['meta'][$row['meta_key']] = $row['meta_value'];

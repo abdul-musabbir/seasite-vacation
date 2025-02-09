@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App.tsx";
 import "./index.css";
 import Checkout from "./pages/Checkout.tsx";
+import House from "./pages/House.tsx";
 import SinglePage from "./pages/SinglePage.tsx";
 
 const NotFound = React.lazy(() => import("./pages/NotFound.tsx"));
@@ -16,6 +17,10 @@ const routerProvider = createBrowserRouter([
   {
     path: "/:id",
     element: <SinglePage />,
+  },
+  {
+    path: "/house",
+    element: <House />,
   },
   {
     path: "/checkout",
