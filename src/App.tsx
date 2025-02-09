@@ -2,6 +2,7 @@ import Venmo from "./assets/venmo.svg";
 import Zelle from "./assets/zelle.png";
 
 import React, { Suspense } from "react";
+import ContactForm from "./components/ContactForm";
 
 // Lazy-load components
 const HeroSection = React.lazy(() => import("./components/HeroSection"));
@@ -32,6 +33,7 @@ function App() {
         <BookingGuideline />
         <HowToBook Venmo={Venmo} Zelle={Zelle} />
         <TesnimonialsSection />
+        <ContactForm />
         <Footer />
       </Suspense>
     </div>
