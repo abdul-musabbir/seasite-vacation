@@ -1,48 +1,48 @@
 import { Bath, Bed, Coffee, Heart, MapPin, Users } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 import { Link } from "react-router-dom";
-import { GetData } from "../lib/getSinglePageContent";
-import { Listing } from "../utils/types";
+import { useData } from "../lib/dataContext";
 type GetPriceLabel = (
   priceType: string,
   price: number,
   minStay: number
 ) => string | JSX.Element;
 export default function OurFeaturedTours() {
-  const [ourFeaturedData, setOurFeaturedData] = useState<Listing[]>([]);
-  const [loading, setLoading] = useState(true); // Loading state to handle component loading
+  const { data: ourFeaturedData, loading } = useData();
+  // const [ourFeaturedData, setOurFeaturedData] = useState<Listing[]>([]);
+  // const [loading, setLoading] = useState(true); // Loading state to handle component loading
 
-  const fetchData = useCallback(async () => {
-    setLoading(true); // Set loading to true when starting to fetch data
-    try {
-      const cachedData = localStorage.getItem("ourFeaturedData");
+  // const fetchData = useCallback(async () => {
+  //   setLoading(true); // Set loading to true when starting to fetch data
+  //   try {
+  //     const cachedData = localStorage.getItem("ourFeaturedData");
 
-      if (cachedData) {
-        // Use cached data if available
-        setOurFeaturedData(JSON.parse(cachedData));
-        setLoading(false);
-      } else {
-        // Fetch new data and store it in localStorage
-        const data = await GetData();
+  //     if (cachedData) {
+  //       // Use cached data if available
+  //       setOurFeaturedData(JSON.parse(cachedData));
+  //       setLoading(false);
+  //     } else {
+  //       // Fetch new data and store it in localStorage
+  //       const data = await GetData();
 
-        if (Array.isArray(data)) {
-          setOurFeaturedData(data);
-          localStorage.setItem("ourFeaturedData", JSON.stringify(data)); // Cache the fetched data
-        } else {
-          setOurFeaturedData([]);
-        }
-        setLoading(false);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setOurFeaturedData([]);
-      setLoading(false);
-    }
-  }, []);
+  //       if (Array.isArray(data)) {
+  //         setOurFeaturedData(data);
+  //         localStorage.setItem("ourFeaturedData", JSON.stringify(data)); // Cache the fetched data
+  //       } else {
+  //         setOurFeaturedData([]);
+  //       }
+  //       setLoading(false);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //     setOurFeaturedData([]);
+  //     setLoading(false);
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+  // useEffect(() => {
+  //   fetchData();
+  // }, [fetchData]);
 
   const getPriceLabel: GetPriceLabel = useCallback(
     (priceType: string, price: number, minStay: number) => {
@@ -132,21 +132,6 @@ export default function OurFeaturedTours() {
                 <button className="absolute top-4 right-4 p-2 bg-white rounded-full">
                   <Heart className="w-5 h-5" />
                 </button>
-                <div
-                  className={`absolute top-4 left-4 ${
-                    index === 0
-                      ? "bg-purple-50 text-purple-800"
-                      : index === 1
-                      ? "bg-green-50 text-green-800"
-                      : "bg-blue-50 text-green-800"
-                  } px-3 py-1 rounded-full font-medium text-sm`}
-                >
-                  {index === 0
-                    ? "Top Rated"
-                    : index === 1
-                    ? "Best Sale"
-                    : "25% Off"}
-                </div>
               </div>
               <div className="p-6">
                 <h3 className="text-3xl font-bold mb-2">

@@ -1,8 +1,9 @@
-import React, { StrictMode, Suspense } from "react";
+import React, { Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App.tsx";
 import "./index.css";
+import { DataProvider } from "./lib/dataContext.tsx";
 import Checkout from "./pages/Checkout.tsx";
 import House from "./pages/House.tsx";
 import SinglePage from "./pages/SinglePage.tsx";
@@ -40,14 +41,8 @@ const routerProvider = createBrowserRouter([
   },
 ]);
 
-if (process.env.NODE_ENV !== "production") {
-  createRoot(document.getElementById("root")!).render(
-    <StrictMode>
-      <RouterProvider router={routerProvider} />
-    </StrictMode>
-  );
-} else {
-  createRoot(document.getElementById("root")!).render(
+createRoot(document.getElementById("root")!).render(
+  <DataProvider>
     <RouterProvider router={routerProvider} />
-  );
-}
+  </DataProvider>
+);

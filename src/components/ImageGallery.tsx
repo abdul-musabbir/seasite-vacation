@@ -23,6 +23,7 @@ export default function ImageGallery({ images }: { images: Image[] }) {
           setFailedImages((prev) => new Set([...prev, image.url]));
           reject(`Failed to load image: ${image.url}`);
         };
+        img.fetchPriority = "high";
       });
     });
 
@@ -114,7 +115,6 @@ export default function ImageGallery({ images }: { images: Image[] }) {
                 src={image.url}
                 alt={image.alt}
                 loading="eager" // Ensures image is loaded immediately
-                fetchPriority="high" // High priority for faster loading
                 className="w-full h-full object-cover transition-transform duration-300 will-change-transform
                   group-hover:scale-110 group-hover:brightness-90"
               />

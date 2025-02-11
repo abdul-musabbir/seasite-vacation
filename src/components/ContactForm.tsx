@@ -1,3 +1,4 @@
+import axios from "axios";
 import { Mail, MapPin, Phone } from "lucide-react";
 import React, { useState } from "react";
 
@@ -8,11 +9,65 @@ function ContactForm() {
     email: "",
     message: "",
   });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log(formData);
+
+    // Basic validation
+    if (!formData.name || !formData.email || !formData.message) {
+      setErrorMessage("Please fill out all required fields.");
+      return;
+    }
+    if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      setErrorMessage("Please enter a valid email address.");
+      return;
+    }
+
+    setIsLoading(true);
+    setErrorMessage(null); // Reset previous errors
+    setSuccessMessage(null); // Reset success message
+
+    axios
+      .post(
+        "http://localhost:5000/sendMail.php",
+        {
+          data: {
+            name: formData.name,
+            phone: formData.phone,
+            email: formData.email,
+            message: formData.message,
+          },
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          setSuccessMessage("Message sent successfully!");
+          console.log(response.data);
+          setFormData({
+            name: "",
+            phone: "",
+            email: "",
+            message: "",
+          });
+        }
+      })
+      .catch((err) => {
+        setErrorMessage(
+          "There was an error sending your message. Please try again."
+        );
+        console.error(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const handleChange = (
@@ -26,7 +81,7 @@ function ContactForm() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 py-20 sm:px-6 lg:px-8">
         <div className="bg-white shadow-xl rounded-2xl overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-2">
             {/* Left Side - Contact Information */}
@@ -42,7 +97,7 @@ function ContactForm() {
               <div className="absolute inset-0 bg-blue-800 backdrop-blur-sm z-10" />
 
               {/* Content */}
-              <div className="relative z-20 p-12">
+              <div className="relative z-20 p-5 md:p-12">
                 <div className="space-y-8">
                   <div>
                     <h2 className="text-4xl font-bold text-white mb-4">
@@ -113,7 +168,7 @@ function ContactForm() {
             </div>
 
             {/* Right Side - Contact Form */}
-            <div className="p-12">
+            <div className="p-5 md:p-12">
               <h3 className="text-2xl font-semibold text-gray-900 mb-8">
                 Send us a Message
               </h3>
@@ -131,7 +186,7 @@ function ContactForm() {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 outline-none"
                     placeholder="Your name"
                     required
                   />
@@ -150,7 +205,7 @@ function ContactForm() {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 outline-none"
                     placeholder="Your phone number"
                     required
                   />
@@ -169,7 +224,7 @@ function ContactForm() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 outline-none"
                     placeholder="your@email.com"
                     required
                   />
@@ -188,17 +243,21 @@ function ContactForm() {
                     value={formData.message}
                     onChange={handleChange}
                     rows={4}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 outline-none"
                     placeholder="Your message"
                     required
                   ></textarea>
                 </div>
 
+                {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+                {successMessage && (
+                  <p style={{ color: "green" }}>{successMessage}</p>
+                )}
                 <button
                   type="submit"
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition duration-200"
                 >
-                  Send Message
+                  {isLoading ? "Sending..." : "Send Message"}
                 </button>
               </form>
             </div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-
+import SeasideVacationLogo from "../assets/seasidebeachvacationslogo.png";
 export default function Header() {
   const [showDropDown, setShowDropDown] = useState(false);
   return (
@@ -10,9 +10,7 @@ export default function Header() {
           to="/"
           className="flex items-center space-x-3 rtl:space-x-reverse"
         >
-          <span className="self-center text-2xl font-semibold whitespace-nowrap ">
-            Seaside Beach Vacations
-          </span>
+          <img src={SeasideVacationLogo} alt="logo" />
         </Link>
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
           <button

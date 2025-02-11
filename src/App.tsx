@@ -3,6 +3,7 @@ import Zelle from "./assets/zelle.png";
 
 import React, { Suspense } from "react";
 import ContactForm from "./components/ContactForm";
+import Preloader from "./components/Preloader";
 
 // Lazy-load components
 const HeroSection = React.lazy(() => import("./components/HeroSection"));
@@ -25,7 +26,7 @@ const Headers = React.lazy(() => import("./components/Headers"));
 function App() {
   return (
     <div className="min-h-screen">
-      <Suspense fallback={<div className="loading-spinner">Loading...</div>}>
+      <Suspense fallback={<Preloader />}>
         <Headers />
         <HeroSection />
         <OurFeaturedTours />
@@ -33,7 +34,9 @@ function App() {
         <BookingGuideline />
         <HowToBook Venmo={Venmo} Zelle={Zelle} />
         <TesnimonialsSection />
-        <ContactForm />
+        <div id="contact-us">
+          <ContactForm />
+        </div>
         <Footer />
       </Suspense>
     </div>

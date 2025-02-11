@@ -11,20 +11,20 @@ const DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 // Demo bookings with overlapping dates
 const DEMO_BOOKINGS: BookingType[] = [
   {
-    checkIn: new Date(2025, 1, 5),
-    checkOut: new Date(2025, 1, 10),
+    checkIn: new Date(1995, 1, 5),
+    checkOut: new Date(1995, 1, 10),
   },
   {
-    checkIn: new Date(2025, 1, 10),
-    checkOut: new Date(2025, 1, 13),
+    checkIn: new Date(1995, 1, 10),
+    checkOut: new Date(1995, 1, 13),
   },
   {
-    checkIn: new Date(2025, 1, 15),
-    checkOut: new Date(2025, 1, 20),
+    checkIn: new Date(1995, 1, 15),
+    checkOut: new Date(1995, 1, 20),
   },
   {
-    checkIn: new Date(2025, 1, 20),
-    checkOut: new Date(2025, 1, 25),
+    checkIn: new Date(1995, 1, 20),
+    checkOut: new Date(1995, 1, 25),
   },
 ];
 
@@ -141,7 +141,7 @@ function BookingCalendar() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="lg:min-h-screen min-h-[50vh]">
       <div className="bg-white rounded-xl p-4 sm:p-6 w-full ">
         <div className="mb-2 sm:mb-8">
           <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-2">

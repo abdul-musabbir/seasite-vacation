@@ -1,11 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import SeasideVacationLogo from "../assets/seasidebeachvacationslogo.png";
 import { GetData } from "../lib/getSinglePageContent";
+
 import { cn } from "../utils/cn";
+
 interface DataItem {
   title: string;
   slug: string;
 }
+
 export default function Headers() {
   const [openMenu, setOpenMenu] = useState<boolean>(false);
   const [showDropDown, setShowDropDown] = useState<boolean>(false);
@@ -44,19 +48,17 @@ export default function Headers() {
 
   return (
     <nav
-      className={cn(
-        "bg-white border-gray-200 sticky top-0 left-0 right-0 z-50",
-        {
-          " shadow-md": scrolly > 0,
-          " shadow-none": scrolly <= 0,
-        }
-      )}
+      className={cn("z-50 bg-white w-full", {
+        "fixed top-0 left-0 right-0 transition-all duration-300 ": true,
+        "shadow-md": scrolly > 0,
+        "shadow-none": scrolly <= 0,
+        "py-2": scrolly > 0, // Add padding when scrolled
+        "py-4": scrolly <= 0, // Larger padding when at the top
+      })}
     >
-      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
         <Link to="/">
-          <span className="self-center text-2xl font-semibold whitespace-nowrap">
-            Seaside Beach Vacations
-          </span>
+          <img src={SeasideVacationLogo} className="w-20" alt="logo" />
         </Link>
 
         <button
@@ -77,9 +79,9 @@ export default function Headers() {
           >
             <path
               stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
               d="M1 1h15M1 7h15M1 13h15"
             />
           </svg>
@@ -87,17 +89,17 @@ export default function Headers() {
 
         <div
           className={cn("hidden w-full md:block md:w-auto", {
-            " block absolute top-16 left-0 px-8 md:block md:static": openMenu,
+            "block absolute top-16 left-0 px-8 md:block md:static": openMenu,
           })}
         >
-          <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white shadow-xl md:shadow-none">
+          <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent shadow-xl md:shadow-none">
             <li>
               <NavLink
                 to={"/"}
                 className={({ isActive }) =>
                   isActive
-                    ? "block py-2 px-3 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0"
-                    : "block py-2 px-3 text-black bg-transparent rounded-sm md:bg-transparent  md:p-0"
+                    ? "block py-2 px-3 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 hover:text-blue-700 md:p-0"
+                    : "block py-2 px-3 text-black bg-transparent rounded-sm md:bg-transparent  md:p-0 hover:text-blue-700"
                 }
               >
                 Home
@@ -119,9 +121,9 @@ export default function Headers() {
                 >
                   <path
                     stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="m1 1 4 4 4-4"
                   />
                 </svg>
@@ -129,9 +131,9 @@ export default function Headers() {
               {/* <!-- Dropdown menu --> */}
               <div
                 className={cn(
-                  "z-10 hidden md:group-hover:block md:group-hover:absolute left-0 top-5 font-normal bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 ",
+                  "z-10 hidden md:group-hover:block md:group-hover:absolute left-0 top-5 font-normal bg-white divide-y divide-gray-100 rounded-lg shadow-md w-44 ",
                   {
-                    " block w-full": showDropDown,
+                    "block w-full": showDropDown,
                   }
                 )}
               >

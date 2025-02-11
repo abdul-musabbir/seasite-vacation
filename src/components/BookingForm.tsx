@@ -199,14 +199,14 @@ export default function BookingForm({ data }: { data: Listing }) {
               readOnly
               value={checkIn ? format(checkIn, "MMM dd, yyyy") : ""}
               placeholder="Select check-in date"
-              className="pl-10 w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
+              className="pl-10 w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer outline-none"
               onClick={() => setShowCheckInCalendar(!showCheckInCalendar)}
             />
           </div>
           {showCheckInCalendar && (
             <div
               ref={checkInCalendarRef}
-              className="absolute z-10 bg-white shadow-lg rounded-lg mt-1"
+              className="absolute z-10 bg-white p-2.5 shadow-lg rounded-lg mt-1 border"
             >
               <DayPicker
                 mode="single"
@@ -214,7 +214,7 @@ export default function BookingForm({ data }: { data: Listing }) {
                 onSelect={handleCheckInSelect}
                 defaultMonth={checkIn || undefined}
                 disabled={[{ before: new Date() }]}
-                className="border rounded-lg"
+                className="rounded-lg"
               />
             </div>
           )}
@@ -231,7 +231,7 @@ export default function BookingForm({ data }: { data: Listing }) {
               readOnly
               value={checkOut ? format(checkOut, "MMM dd, yyyy") : ""}
               placeholder="Select check-out date"
-              className="pl-10 w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
+              className="pl-10 w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer outline-none"
               onClick={() =>
                 checkIn && setShowCheckOutCalendar(!showCheckOutCalendar)
               }
@@ -240,7 +240,7 @@ export default function BookingForm({ data }: { data: Listing }) {
           {showCheckOutCalendar && checkIn && (
             <div
               ref={checkOutCalendarRef}
-              className="absolute z-10 bg-white shadow-lg rounded-lg mt-1"
+              className="absolute z-10 bg-white p-2.5 shadow-lg rounded-lg mt-1 border"
             >
               <DayPicker
                 mode="single"
@@ -248,7 +248,7 @@ export default function BookingForm({ data }: { data: Listing }) {
                 onSelect={handleCheckOutSelect}
                 defaultMonth={checkOut || checkIn}
                 disabled={[{ before: addDays(checkIn, 1) }]}
-                className="border rounded-lg"
+                className="rounded-lg"
               />
             </div>
           )}

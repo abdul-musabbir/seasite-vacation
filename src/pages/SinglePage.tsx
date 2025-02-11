@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import BookingCalendar from "../components/BookingCalendar";
 import Headers from "../components/Headers";
 import Preloader from "../components/Preloader";
-import { GetData } from "../lib/getSinglePageContent";
+import { useData } from "../lib/dataContext";
 import { Listing } from "../utils/types";
 
 // Lazy-load components
@@ -19,19 +19,17 @@ const PropertyFeatures = lazy(() => import("../components/PropertyFeatures"));
 function SinglePage() {
   const { id } = useParams();
   const [data, setData] = useState<Listing | null>(null);
-
+  const { getSingleData } = useData();
   useEffect(() => {
     async function getData() {
       try {
-        const datas = await GetData();
-        const found = datas.find((item: { slug: string }) => item.slug === id);
-        setData(found);
+        setData(getSingleData(id));
       } catch (error) {
         console.error("Error fetching listing data:", error);
       }
     }
     getData();
-  }, [id]);
+  }, [id, getSingleData]);
 
   // Scroll to the top when the component mounts
   useEffect(() => {
@@ -106,7 +104,7 @@ function SinglePage() {
 
           {/* Right Booking Form */}
           <div className="lg:w-[400px] flex-shrink-0">
-            <div className="sticky top-20">
+            <div className="sticky top-28">
               <Suspense fallback={<div>Loading booking form...</div>}>
                 <BookingForm data={data} />
               </Suspense>

@@ -96,8 +96,8 @@ export default function Slider() {
       modules={[Navigation, Autoplay, Mousewheel, Keyboard]}
       className="mySwiper"
     >
-      {reviews.map((review) => (
-        <SwiperSlide key={review.id}>
+      {reviews.map((_, index) => (
+        <SwiperSlide key={index}>
           <ReviewCard />
         </SwiperSlide>
       ))}
