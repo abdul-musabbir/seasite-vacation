@@ -540,7 +540,7 @@ function Checkout() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-28 md:py-40">
+    <div className="min-h-screen bg-gray-50 pt-28 md:pt-40">
       {showInvoice && <Invoice ref={invoiceRef} />}
 
       {/* Header */}
