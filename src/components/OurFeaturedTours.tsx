@@ -9,40 +9,6 @@ type GetPriceLabel = (
 ) => string | JSX.Element;
 export default function OurFeaturedTours() {
   const { data: ourFeaturedData, loading } = useData();
-  // const [ourFeaturedData, setOurFeaturedData] = useState<Listing[]>([]);
-  // const [loading, setLoading] = useState(true); // Loading state to handle component loading
-
-  // const fetchData = useCallback(async () => {
-  //   setLoading(true); // Set loading to true when starting to fetch data
-  //   try {
-  //     const cachedData = localStorage.getItem("ourFeaturedData");
-
-  //     if (cachedData) {
-  //       // Use cached data if available
-  //       setOurFeaturedData(JSON.parse(cachedData));
-  //       setLoading(false);
-  //     } else {
-  //       // Fetch new data and store it in localStorage
-  //       const data = await GetData();
-
-  //       if (Array.isArray(data)) {
-  //         setOurFeaturedData(data);
-  //         localStorage.setItem("ourFeaturedData", JSON.stringify(data)); // Cache the fetched data
-  //       } else {
-  //         setOurFeaturedData([]);
-  //       }
-  //       setLoading(false);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //     setOurFeaturedData([]);
-  //     setLoading(false);
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, [fetchData]);
 
   const getPriceLabel: GetPriceLabel = useCallback(
     (priceType: string, price: number, minStay: number) => {

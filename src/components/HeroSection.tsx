@@ -1,11 +1,25 @@
-import { ArrowRight, Compass, Star, Waves } from "lucide-react";
-
+import { ArrowRight } from "lucide-react";
+import BackgroundImage from "../assets/seasidebeachvacation-flyview.jpg";
 function HeroSection() {
+  const handleBookNowClick = (e) => {
+    e.preventDefault(); // Prevent default link behavior
+
+    // Get the featured-tours section
+    const featuredToursSection = document.getElementById("featured-tours");
+
+    if (featuredToursSection) {
+      // Apply the margin-top style dynamically
+      featuredToursSection.style.marginTop = "500px";
+
+      // Optionally, scroll to the section
+      featuredToursSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
   return (
     <div
-      className="relative min-h-screen bg-cover bg-center bg-no-repeat flex items-center overflow-hidden before:content-[''] before:absolute before:inset-0 before:bg-black/40"
+      className="relative min-h-screen bg-cover bg-center bg-no-repeat flex items-center overflow-hidden before:content-[''] before:absolute before:inset-0 before:bg-black/40 pt-36"
       style={{
-        backgroundImage: `url("https://i1.wp.com/foreverlostintravel.com/wp-content/uploads/2021/04/Point-Lobos-State-Park.jpg?w=1200&ssl=1")`,
+        backgroundImage: `url("${BackgroundImage}")`,
       }}
     >
       {/* Animated Wave Overlay */}
@@ -17,55 +31,65 @@ function HeroSection() {
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-5xl mx-auto text-center">
           {/* Premium Badge */}
-          <div className="inline-flex items-center bg-white/10 backdrop-blur-sm px-6 py-2 rounded-full mb-8 animate-fade-in">
+          {/* <div className="inline-flex items-center bg-white/10 backdrop-blur-sm px-6 py-2 rounded-full mb-8 animate-fade-in">
             <Star className="w-4 h-4 text-yellow-400 mr-2" />
             <span className="text-white/90 text-sm font-medium">
               Premium Beachfront Experience
             </span>
-          </div>
-
-          {/* Logo Icon with Enhanced Animation */}
-          <div className="mb-8 animate-fade-in">
-            <div className="relative">
-              <Waves className="w-20 h-20 mx-auto text-blue-400 mb-4 animate-pulse" />
-              <div className="absolute inset-0 w-20 h-20 mx-auto bg-blue-400 blur-2xl opacity-20 animate-pulse"></div>
-            </div>
-            <div className="h-1 w-32 mx-auto bg-gradient-to-r from-blue-400 via-blue-200 to-blue-400"></div>
-          </div>
+          </div> */}
 
           {/* Enhanced Main Heading */}
-          <h1 className="text-6xl md:text-8xl font-bold mb-6 leading-tight animate-fade-in">
-            <span className="text-white drop-shadow-2xl">Seaside Beatch</span>
+          <h1 className="text-3xl sm:text-6xl md:text-7xl font-bold mb-6 leading-tight animate-fade-in">
+            <span className="text-white drop-shadow-2xl">
+              WEEKLY BEACH RENTALS
+            </span>
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-200 to-blue-400 animate-gradient">
-              Vacation
+              AT THE JERSEY SHORE
             </span>
           </h1>
 
           {/* Enhanced Subtitle */}
-          <p className="text-xl md:text-2xl mb-10 text-white/90 font-light max-w-3xl mx-auto leading-relaxed animate-fade-in">
-            Located three houses from the beach. 2, 3, 4, and 6 bedroom houses
-            available
-          </p>
+          <div>
+            <p className="text-lg sm:text-xl md:text-2xl mb-3 text-white/90 max-w-3xl mx-auto leading-relaxed animate-fade-in font-medium">
+              Located three houses from the beach. 2, 3, 4, and 6 bedroom houses
+              available
+            </p>
+
+            <p className="text-lg sm:text-xl md:text-2xl mb-3 text-white/90 font-medium max-w-3xl mx-auto leading-relaxed animate-fade-in">
+              Please call or text 201-921-9969
+            </p>
+
+            <p className="text-lg sm:text-xl md:text-2xl mb-10 text-white/90 font-medium max-w-3xl mx-auto leading-relaxed animate-fade-in">
+              Or email at seasidebeachvacations@gmail.com
+            </p>
+          </div>
 
           {/* Location Badge with Animation */}
-          <div className="inline-flex items-center bg-white/10 backdrop-blur-sm px-8 py-4 rounded-full mb-12 group hover:bg-white/20 transition-all cursor-pointer">
+          {/* <div className="inline-flex items-center bg-white/10 backdrop-blur-sm px-8 py-4 rounded-full mb-12 group hover:bg-white/20 transition-all cursor-pointer">
             <Compass className="w-6 h-6 text-blue-400 mr-3 group-hover:rotate-45 transition-transform" />
             <span className="text-white/90 font-medium">
               Three Houses from Seaside Park's Pristine Beach
             </span>
-          </div>
+          </div> */}
 
           {/* Enhanced Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-20">
-            <button className="group bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-10 py-5 rounded-full font-semibold text-lg transition-all transform hover:scale-[1.02] hover:shadow-xl hover:shadow-blue-500/20 flex items-center">
+            <a
+              href={"#featured-tours"}
+              onClick={handleBookNowClick}
+              className="group bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-10 py-5 rounded-full font-semibold text-lg transition-all transform hover:scale-[1.02] hover:shadow-xl hover:shadow-blue-500/20 flex items-center"
+            >
               Book Now
               <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-            </button>
-            <button className="group bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white px-10 py-5 rounded-full font-semibold text-lg transition-all transform hover:scale-[1.02] hover:shadow-xl hover:shadow-white/10 flex items-center border border-white/20">
+            </a>
+            <a
+              href="#contact-us"
+              className="group bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white px-10 py-5 rounded-full font-semibold text-lg transition-all transform hover:scale-[1.02] hover:shadow-xl hover:shadow-white/10 flex items-center border border-white/20"
+            >
               Contact US
               <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-            </button>
+            </a>
           </div>
         </div>
       </div>

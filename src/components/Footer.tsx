@@ -1,4 +1,4 @@
-import { Facebook, Instagram, Phone, Twitter, Youtube } from "lucide-react";
+import { Facebook, Instagram, Linkedin, Phone, Twitter } from "lucide-react";
 
 import { Link } from "react-router-dom";
 
@@ -41,29 +41,19 @@ const Footer = () => {
             <h3 className="font-semibold mb-4">Links</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
-                <a href="#" className="hover:text-amber-500">
-                  Unit 1
-                </a>
+                <Link to="#" className="hover:text-amber-500">
+                  Home
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-amber-500">
-                  Unit 2
-                </a>
+                <Link to="#" className="hover:text-amber-500">
+                  How to Book
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-amber-500">
-                  Unit 3
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-amber-500">
-                  Ocean Oasis
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-amber-500">
-                  Beach Escape
-                </a>
+                <Link to="#" className="hover:text-amber-500">
+                  Features
+                </Link>
               </li>
             </ul>
           </div>
@@ -147,17 +137,32 @@ const Footer = () => {
             </p>
 
             <div className="flex gap-4">
-              <a href="#" className="hover:text-amber-500">
+              <a
+                href="https://www.instagram.com/seasidebeachvacations/"
+                target="_blank"
+                className="hover:text-amber-500"
+              >
                 <Instagram className="h-5 w-5" />
               </a>
-              <a href="#" className="hover:text-amber-500">
+              <a
+                href="https://www.facebook.com/seasidebeachvacations"
+                target="_blank"
+                className="hover:text-amber-500"
+              >
                 <Facebook className="h-5 w-5" />
               </a>
-              <a href="#" className="hover:text-amber-500">
+              <a
+                href="https://x.com/SeaVacations"
+                target="_blank"
+                className="hover:text-amber-500"
+              >
                 <Twitter className="h-5 w-5" />
               </a>
-              <a href="#" className="hover:text-amber-500">
-                <Youtube className="h-5 w-5" />
+              <a
+                href="https://www.linkedin.com/company/seasidebeachvacations/"
+                target="_blank"
+              >
+                <Linkedin />
               </a>
             </div>
           </div>

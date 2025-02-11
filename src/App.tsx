@@ -29,9 +29,17 @@ function App() {
       <Suspense fallback={<Preloader />}>
         <Headers />
         <HeroSection />
-        <OurFeaturedTours />
-        <FacilitiesSection />
-        <BookingGuideline />
+        <div id="featured-tours">
+          <OurFeaturedTours />
+        </div>
+
+        <div id="features-and-amenities">
+          <FacilitiesSection />
+        </div>
+
+        <div id="how-to-book">
+          <BookingGuideline />
+        </div>
         <HowToBook Venmo={Venmo} Zelle={Zelle} />
         <TesnimonialsSection />
         <div id="contact-us">
