@@ -1,7 +1,7 @@
 import { Facebook, Instagram, Linkedin, Phone, Twitter } from "lucide-react";
 
 import { Link } from "react-router-dom";
-
+import SeasideLogo from "../assets/seasidebeachvacationslogo.png";
 const Footer = () => {
   // const scrollToTop = () => {
   //   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -13,7 +13,9 @@ const Footer = () => {
         {/* Top Section with Logo and Phone */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12">
           <div className="flex items-center gap-2">
-            <span className="text-2xl font-bold">Seaside Beach Vacations</span>
+            <Link to={"/"} className="text-2xl font-bold">
+              <img src={SeasideLogo} className="w-44" alt="" />
+            </Link>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-gray-400 text-sm">Need help? Call us</span>
@@ -37,7 +39,7 @@ const Footer = () => {
           </div>
 
           {/* Support */}
-          <div className="px-10">
+          <div className="px-10 md:pl-24">
             <h3 className="font-semibold mb-4">Links</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
@@ -58,7 +60,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div className="px-10">
+          <div className="px-10 md:pl-24">
             <h3 className="font-semibold mb-4">Home</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>

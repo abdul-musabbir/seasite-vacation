@@ -1,20 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import BackgroundImage from "../assets/seasidebeachvacation-flyview.jpg";
 function HeroSection() {
-  const handleBookNowClick = (e) => {
-    e.preventDefault(); // Prevent default link behavior
-
-    // Get the featured-tours section
-    const featuredToursSection = document.getElementById("featured-tours");
-
-    if (featuredToursSection) {
-      // Apply the margin-top style dynamically
-      featuredToursSection.style.marginTop = "500px";
-
-      // Optionally, scroll to the section
-      featuredToursSection.scrollIntoView({ behavior: "smooth" });
-    }
-  };
   return (
     <div
       className="relative min-h-screen bg-cover bg-center bg-no-repeat flex items-center overflow-hidden before:content-[''] before:absolute before:inset-0 before:bg-black/40 pt-36"
@@ -52,8 +38,8 @@ function HeroSection() {
           {/* Enhanced Subtitle */}
           <div>
             <p className="text-lg sm:text-xl md:text-2xl mb-3 text-white/90 max-w-3xl mx-auto leading-relaxed animate-fade-in font-medium">
-              Located three houses from the beach. 2, 3, 4, and 6 bedroom houses
-              available
+              Located three houses from the beach.
+              <br /> 2, 3, 4, and 6 bedroom houses available
             </p>
 
             <p className="text-lg sm:text-xl md:text-2xl mb-3 text-white/90 font-medium max-w-3xl mx-auto leading-relaxed animate-fade-in">
@@ -77,7 +63,6 @@ function HeroSection() {
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-20">
             <a
               href={"#featured-tours"}
-              onClick={handleBookNowClick}
               className="group bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-10 py-5 rounded-full font-semibold text-lg transition-all transform hover:scale-[1.02] hover:shadow-xl hover:shadow-blue-500/20 flex items-center"
             >
               Book Now

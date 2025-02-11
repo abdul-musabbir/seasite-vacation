@@ -7,7 +7,7 @@ export default function TesnimonialsSection() {
         <div className="">
           <div className="space-y-2">
             <h2 className="text-2xl md:text-4xl font-bold text-black">
-              They Love Travila
+              Testimonial
             </h2>
             <p className="text-[#959593] text-lg">
               What out clients are saying about us
