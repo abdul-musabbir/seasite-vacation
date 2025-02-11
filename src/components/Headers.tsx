@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import SeasideVacationLogo from "../assets/seasidebeachvacationslogo.png";
-import { GetData } from "../lib/getSinglePageContent";
 
 import { ChevronDown, Menu, X } from "lucide-react";
+import { useData } from "../lib/dataContext";
 import { cn } from "../utils/cn";
 
 interface DataItem {
@@ -14,21 +14,17 @@ interface DataItem {
 export default function Headers() {
   const [openMenu, setOpenMenu] = useState<boolean>(false);
   const [showDropDown, setShowDropDown] = useState<boolean>(false);
+  const pathname = useLocation().pathname.split("/");
   const [data, setData] = useState<DataItem[]>([]);
   const [scrolly, setScrolly] = useState<number>(0);
-
+  const { data: datas } = useData();
   const fetchData = useCallback(async () => {
-    try {
-      const data = await GetData();
-      setData(
-        data.map((item: { title: string; slug: string }) => ({
-          title: item.title,
-          slug: item.slug,
-        }))
-      );
-    } catch (error) {
-      console.log(error);
-    }
+    setData(
+      datas.map((item: { title: string; slug: string }) => ({
+        title: item.title,
+        slug: item.slug,
+      }))
+    );
   }, []);
 
   useEffect(() => {
@@ -46,6 +42,8 @@ export default function Headers() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [handleScroll]);
+
+  console.log(pathname.includes("checkout"));
 
   return (
     <nav
@@ -90,6 +88,9 @@ export default function Headers() {
                   {
                     "text-black md:text-white": scrollY <= 0,
                     "text-black": scrollY > 0,
+                  },
+                  {
+                    " md:text-black": pathname.includes("checkout"),
                   }
                 )}
               >
@@ -101,10 +102,13 @@ export default function Headers() {
                 onClick={() => setShowDropDown(!showDropDown)}
                 id="dropdownNavbarLink"
                 className={cn(
-                  "flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto ",
+                  "flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto py-4",
                   {
                     "text-black md:text-white": scrollY <= 0,
                     "text-black": scrollY > 0,
+                  },
+                  {
+                    " md:text-black": pathname.includes("checkout"),
                   }
                 )}
               >
@@ -122,9 +126,12 @@ export default function Headers() {
               {/* <!-- Dropdown menu --> */}
               <div
                 className={cn(
-                  "z-10 hidden md:group-hover:block md:group-hover:absolute left-0 top-5 font-normal bg-white divide-y divide-gray-100 rounded-lg shadow-md w-44 ",
+                  "z-10 hidden md:group-hover:block md:group-hover:absolute left-0 top-6 font-normal bg-white divide-y divide-gray-100 rounded-lg shadow-md w-44 ",
                   {
                     "block w-full": showDropDown,
+                  },
+                  {
+                    " md:text-black": pathname.includes("checkout"),
                   }
                 )}
               >
@@ -150,6 +157,9 @@ export default function Headers() {
                   {
                     "text-black md:text-white": scrollY <= 0,
                     "text-black": scrollY > 0,
+                  },
+                  {
+                    " md:text-black": pathname.includes("checkout"),
                   }
                 )}
               >
@@ -164,6 +174,9 @@ export default function Headers() {
                   {
                     "text-black md:text-white": scrollY <= 0,
                     "text-black": scrollY > 0,
+                  },
+                  {
+                    " md:text-black": pathname.includes("checkout"),
                   }
                 )}
               >

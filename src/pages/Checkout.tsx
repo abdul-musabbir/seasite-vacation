@@ -48,6 +48,7 @@ function Checkout() {
   }
 
   const location = useLocation();
+
   const navigate = useNavigate();
   const { data, checkIn, checkOut, adults, subtotalprice } =
     location.state || {};
@@ -539,7 +540,7 @@ function Checkout() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 py-28 md:py-40">
       {showInvoice && <Invoice ref={invoiceRef} />}
 
       {/* Header */}
