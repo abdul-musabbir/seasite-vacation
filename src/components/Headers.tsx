@@ -18,18 +18,18 @@ export default function Headers() {
   const [data, setData] = useState<DataItem[]>([]);
   const [scrolly, setScrolly] = useState<number>(0);
   const { data: datas } = useData();
-  const fetchData = useCallback(async () => {
-    setData(
-      datas.map((item: { title: string; slug: string }) => ({
-        title: item.title,
-        slug: item.slug,
-      }))
-    );
-  }, []);
 
+  // Fetch data when datas is available
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    if (datas) {
+      setData(
+        datas.map((item: { title: string; slug: string }) => ({
+          title: item.title,
+          slug: item.slug,
+        }))
+      );
+    }
+  }, [datas]); // Re-run when datas updates
 
   const handleScroll = useCallback(() => {
     setScrolly(window.scrollY);
@@ -42,8 +42,6 @@ export default function Headers() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [handleScroll]);
-
-  console.log(pathname.includes("checkout"));
 
   return (
     <nav

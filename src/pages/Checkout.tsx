@@ -517,7 +517,7 @@ function Checkout() {
     setLoader(true);
     const listing_id = data.id;
     axios
-      .post("http://localhost:5000/bookingform.php", {
+      .post("https://hello.seasidebeachvacations.com/bookingform.php", {
         data: {
           ...formDatas,
           listing_id,

@@ -1,4 +1,4 @@
-import { Facebook, Instagram, Linkedin, Phone, Twitter } from "lucide-react";
+import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
 
 import { Link } from "react-router-dom";
 import SeasideLogo from "../assets/seasidebeachvacationslogo.png";
@@ -17,17 +17,17 @@ const Footer = () => {
               <img src={SeasideLogo} className="w-44" alt="" />
             </Link>
           </div>
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <span className="text-gray-400 text-sm">Need help? Call us</span>
             <Phone className="h-4 w-4 text-amber-500" />
             <span className="text-amber-500">+1 201-921-9969</span>
-          </div>
+          </div> */}
         </div>
 
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[30%_1fr_1fr_1fr]  lg:gap-5 gap-8 mb-12">
           {/* Contact Us */}
-          <div className="">
+          <div className="px-10">
             <h3 className="font-semibold mb-4">How to Book</h3>
             <p className="text-gray-400 text-sm mb-2">
               Payment can be made by Venmo, Zelle, or by check. Deposit is due

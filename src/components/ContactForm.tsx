@@ -32,7 +32,7 @@ function ContactForm() {
 
     axios
       .post(
-        "http://localhost:5000/sendMail.php",
+        "https://hello.seasidebeachvacations.com/sendMail.php",
         {
           data: {
             name: formData.name,
