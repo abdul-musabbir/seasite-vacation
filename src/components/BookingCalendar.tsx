@@ -200,13 +200,6 @@ function BookingCalendar() {
             <span className="text-gray-600">Check-out</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 relative">
-              <div className="absolute inset-0 bg-green-100 clip-diagonal-start" />
-              <div className="absolute inset-0 bg-blue-100 clip-diagonal-end" />
-            </div>
-            <span className="text-gray-600">Split day</span>
-          </div>
-          <div className="flex items-center gap-2">
             <div className="w-4 h-4 bg-red-50 border border-red-100 rounded" />
             <span className="text-gray-600">Booked</span>
           </div>

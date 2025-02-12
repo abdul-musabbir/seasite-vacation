@@ -81,7 +81,7 @@ function ContactForm() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 py-20 sm:px-6 lg:px-8">
+      <div className="w-[92%] xl:max-w-screen-xl mx-auto px-4 py-28 sm:px-6 lg:px-8">
         <div className="bg-white shadow-xl rounded-2xl overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-2">
             {/* Left Side - Contact Information */}

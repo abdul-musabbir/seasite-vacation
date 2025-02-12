@@ -67,7 +67,7 @@ export default function OurFeaturedTours() {
   );
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-16">
+    <div className="w-[92%] xl:max-w-screen-xl mx-auto px-4 py-16">
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 space-y-4 lg:space-y-0">
         <div>
           <h2 className="text-3xl font-bold mb-2">Our Featured Tours</h2>

@@ -1,7 +1,7 @@
 import Venmo from "./assets/venmo.svg";
 import Zelle from "./assets/zelle.png";
 
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import ContactForm from "./components/ContactForm";
 import Preloader from "./components/Preloader";
 
@@ -24,6 +24,10 @@ const Footer = React.lazy(() => import("./components/Footer"));
 const Headers = React.lazy(() => import("./components/Headers"));
 
 function App() {
+  useEffect(() => {
+    document.title = "Seaside Beach Vacation";
+  }, []);
+
   return (
     <div className="min-h-screen">
       <Suspense fallback={<Preloader />}>

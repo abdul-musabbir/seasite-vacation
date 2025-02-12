@@ -36,6 +36,11 @@ function SinglePage() {
     window.scrollTo(0, 0);
   }, []);
 
+  useEffect(() => {
+    document.title =
+      data?.title + " | " + "Seaside Beach Vacations" || "Loading...";
+  }, [data]);
+
   if (!data) {
     return <Preloader />;
   }
@@ -51,19 +56,20 @@ function SinglePage() {
         <ImageSlider images={JSON.parse(data.gallery_images)} />
       </Suspense>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="w-[92%] xl:max-w-screen-xl mx-auto px-4 py-16">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Left Content Area */}
-          <div className="flex-1 space-y-10">
-            <div>
+          <div className="flex-1 space-y-20">
+            <div className="space-y-4">
               <h1 className="text-4xl font-bold text-gray-900">{data.title}</h1>
               <div className="flex items-center gap-2 mt-2 text-gray-600">
                 <MapPin className="w-5 h-5" />
                 <span>{data.location}</span>
               </div>
+              <p className="text-gray-700 leading-relaxed">
+                {data.description}
+              </p>
             </div>
-
-            <p className="text-gray-700 leading-relaxed">{data.description}</p>
 
             <div>
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">

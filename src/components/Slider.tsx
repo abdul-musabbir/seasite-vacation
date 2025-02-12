@@ -40,7 +40,7 @@ const reviews = [
 
 const ReviewCard = ({ data }) => {
   return (
-    <div className="border rounded-3xl p-8 bg-white">
+    <div className="border rounded-3xl p-6 bg-white">
       <div>
         <div>
           <div className="space-y-6">
@@ -57,11 +57,12 @@ const ReviewCard = ({ data }) => {
               </div>
 
               {/* star */}
-              <div className="flex gap-4">
-                <Star fill="yellow" className="text-amber-400" />
-                <Star fill="yellow" className="text-amber-400" />
-                <Star fill="yellow" className="text-amber-400" />
-                <Star fill="yellow" className="text-amber-400" />
+              <div className="flex gap-1 items-center">
+                <Star fill="yellow" className="text-amber-400 size-5" />
+                <Star fill="yellow" className="text-amber-400 size-5" />
+                <Star fill="yellow" className="text-amber-400 size-5" />
+                <Star fill="yellow" className="text-amber-400 size-5" />
+                <Star fill="yellow" className="text-amber-400 size-5" />
               </div>
             </div>
           </div>

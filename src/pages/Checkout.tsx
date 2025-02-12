@@ -31,6 +31,10 @@ function Checkout() {
     message: "",
   });
 
+  useEffect(() => {
+    document.title = "Checkout | Seaside Beach Vacations";
+  }, []);
+
   const [reference_code, setRefernceCode] = useState<string>("");
   const formatPrice = (amount: number) => {
     return new Intl.NumberFormat("en-US", {

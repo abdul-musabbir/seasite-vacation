@@ -148,7 +148,11 @@ export default function Headers() {
             </li>
             <li>
               <a
-                href="#features-and-amenities"
+                href={
+                  pathname.includes("checkout")
+                    ? "/"
+                    : "#features-and-amenities"
+                }
                 className={cn(
                   "block py-2 text-gray-900 px-3  rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0",
                   {
@@ -165,7 +169,7 @@ export default function Headers() {
             </li>
             <li>
               <a
-                href="#how-to-book"
+                href={pathname.includes("checkout") ? "/" : "#how-to-book"}
                 className={cn(
                   "block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0",
                   {

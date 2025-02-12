@@ -24,11 +24,14 @@ const features = [
 
 export default function PropertyFeatures() {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+    <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
       {features.map((feature, index) => {
         const Icon = feature.icon;
         return (
-          <div key={index} className="flex items-center gap-3">
+          <div
+            key={index}
+            className="grid grid-cols-[auto_1fr] items-center gap-3"
+          >
             <Icon className="w-5 h-5 text-blue-600" />
             <span className="text-gray-700">{feature.text}</span>
           </div>

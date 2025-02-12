@@ -9,7 +9,7 @@ const Footer = () => {
 
   return (
     <footer className="bg-black text-white pt-16 pb-6">
-      <div className="container mx-auto px-4">
+      <div className="w-[92%] xl:max-w-screen-xl mx-auto">
         {/* Top Section with Logo and Phone */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12">
           <div className="flex items-center gap-2">
@@ -27,7 +27,7 @@ const Footer = () => {
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[30%_1fr_1fr_1fr]  lg:gap-5 gap-8 mb-12">
           {/* Contact Us */}
-          <div className="px-10">
+          <div className="">
             <h3 className="font-semibold mb-4">How to Book</h3>
             <p className="text-gray-400 text-sm mb-2">
               Payment can be made by Venmo, Zelle, or by check. Deposit is due
@@ -39,7 +39,7 @@ const Footer = () => {
           </div>
 
           {/* Support */}
-          <div className="px-10 md:pl-24">
+          <div className=" md:pl-24">
             <h3 className="font-semibold mb-4">Links</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
@@ -60,7 +60,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div className="px-10 md:pl-24">
+          <div className=" lg:pl-16">
             <h3 className="font-semibold mb-4">Home</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
@@ -92,7 +92,7 @@ const Footer = () => {
           </div>
 
           {/* Company */}
-          <div className="px-10">
+          <div className="md:pl-24 lg:pl-0">
             <h3 className="font-semibold mb-4">Contact Us</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>

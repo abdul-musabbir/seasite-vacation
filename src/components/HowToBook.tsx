@@ -8,7 +8,7 @@ export default function HowToBook({
   Zelle: string;
 }) {
   return (
-    <div className="max-w-7xl mx-auto px-4 py-16 md:py-24">
+    <div className="w-[92%] xl:max-w-screen-xl mx-auto px-4 py-16 md:py-24">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
         {/* Left side - Image Grid */}
         <div className="grid grid-cols-2 gap-4 relative">

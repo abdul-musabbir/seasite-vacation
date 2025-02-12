@@ -13,7 +13,7 @@ import {
 
 export default function FacilitiesSection() {
   return (
-    <div className="max-w-7xl mx-auto px-4 py-16 md:py-24">
+    <div className="w-[92%] xl:max-w-screen-xl mx-auto px-4 py-16 md:py-24">
       <div className="flex flex-col gap-12 justify-center items-center">
         {/* Left side - Content */}
         <div className="col-span-2 max-w-2xl text-center mx-auto">
