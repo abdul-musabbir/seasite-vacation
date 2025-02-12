@@ -2,6 +2,7 @@ import React, { Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App.tsx";
+import Preloader from "./components/Preloader.tsx";
 import "./index.css";
 import { DataProvider } from "./lib/dataContext.tsx";
 import Checkout from "./pages/Checkout.tsx";
@@ -43,6 +44,8 @@ const routerProvider = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <DataProvider>
-    <RouterProvider router={routerProvider} />
+    <Suspense fallback={<Preloader />}>
+      <RouterProvider router={routerProvider} />
+    </Suspense>
   </DataProvider>
 );

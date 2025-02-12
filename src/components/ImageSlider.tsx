@@ -4,7 +4,12 @@ interface Image {
   url: string;
   alt: string;
 }
-export default function ImageSlider({ images }: { images: Image[] }) {
+export default function ImageSlider({
+  images: allImages,
+}: {
+  images: Image[];
+}) {
+  const images = allImages.slice(0, 10);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // Go to the next slide
@@ -43,7 +48,7 @@ export default function ImageSlider({ images }: { images: Image[] }) {
             src={image.url}
             alt={image.alt}
             className="w-full h-full object-cover"
-            loading="eager" // Force eager loading to load all images at once
+            loading="lazy" // Force eager loading to load all images at once
           />
         </div>
       ))}

@@ -20,6 +20,7 @@ function SinglePage() {
   const { id } = useParams();
   const [data, setData] = useState<Listing | null>(null);
   const { getSingleData } = useData();
+
   useEffect(() => {
     async function getData() {
       try {
