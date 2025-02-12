@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import SeasideVacationLogo from "../assets/seasidebeachvacationslogo.png";
 
@@ -31,17 +31,16 @@ export default function Headers() {
     }
   }, [datas]); // Re-run when datas updates
 
-  const handleScroll = useCallback(() => {
-    setScrolly(window.scrollY);
-  }, []);
-
   useEffect(() => {
+    const handleScroll = () => {
+      setScrolly(window.scrollY);
+    };
     window.addEventListener("scroll", handleScroll);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [handleScroll]);
+  }, []);
 
   return (
     <nav
