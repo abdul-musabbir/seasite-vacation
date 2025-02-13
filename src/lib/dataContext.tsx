@@ -32,41 +32,28 @@ export const DataProvider = ({ children }: DataProviderProps) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Using localStorage for caching data to make the initial load faster.
   useEffect(() => {
-    const cachedData = localStorage.getItem("listing-data");
-    if (cachedData) {
-      setData(JSON.parse(cachedData));
-      setLoading(false);
-    } else {
-      const fetchData = async () => {
-        try {
-          const response = await fetch(
-            "https://hello.seasidebeachvacations.com/listing-data.php"
-          );
-          if (!response.ok) throw new Error("Failed to fetch data");
-          const result: DataType[] = await response.json();
-          setData(result);
-          localStorage.setItem("listing-data", JSON.stringify(result)); // Cache data
-        } catch (err) {
-          setError((err as Error).message);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchData();
-    }
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          "https://hello.seasidebeachvacations.com/listing-data.php"
+        );
+        if (!response.ok) throw new Error("Failed to fetch data");
+        const result: DataType[] = await response.json();
+        setData(result);
+      } catch (err) {
+        setError((err as Error).message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, []);
 
   // Function to fetch a single item by ID
   const getSingleData = (id: string) => {
     return data?.find((item) => item.slug === id);
   };
-
-  // const value = useMemo(
-  //   () => ({ data, loading, error, getSingleData }),
-  //   [data, loading, error]
-  // );
 
   const value = { data, loading, error, getSingleData };
 

@@ -1,16 +1,15 @@
 import {
   Car,
   Flame,
+  Home,
+  MapPin,
   MoreHorizontal,
-  ShowerHead as Shower,
   Trees,
   Tv,
   UtensilsCrossed,
-  WashingMachine as Washing,
-  Wifi,
-  Wind,
+  WashingMachine,
 } from "lucide-react";
-
+import MapPinHouseIcon from "./MapPinHomeIcon";
 export default function FacilitiesSection() {
   return (
     <div className="w-[92%] xl:max-w-screen-xl mx-auto px-4 py-16 md:py-24">
@@ -31,34 +30,26 @@ export default function FacilitiesSection() {
             {
               icon: (
                 <div className="w-12 h-12 flex items-center justify-center bg-emerald-100 rounded-xl mb-3">
-                  <Shower className="w-6 h-6 text-emerald-500" />
+                  <Home className="w-6 h-6 text-emerald-500" />
                 </div>
               ),
-              name: "Outdoor shower for when you come off beach",
+              name: "3 Houses From Beach",
             },
             {
               icon: (
                 <div className="w-12 h-12 flex items-center justify-center bg-emerald-100 rounded-xl mb-3">
-                  <Car className="w-6 h-6 text-emerald-500" />
+                  <MapPinHouseIcon className="w-6 h-6 text-emerald-500" />
                 </div>
               ),
-              name: "Off street parking",
+              name: "If You Want Houses, They Are All Next to Each Other",
             },
             {
               icon: (
                 <div className="w-12 h-12 flex items-center justify-center bg-emerald-100 rounded-xl mb-3">
-                  <Tv className="w-6 h-6 text-emerald-500" />
+                  <MapPin className="w-6 h-6 text-emerald-500" />
                 </div>
               ),
-              name: "Smart TV",
-            },
-            {
-              icon: (
-                <div className="w-12 h-12 flex items-center justify-center bg-emerald-100 rounded-xl mb-3">
-                  <UtensilsCrossed className="w-6 h-6 text-emerald-500" />
-                </div>
-              ),
-              name: "Full size kitchen fully equipped",
+              name: "23, 29, and 30 Farragut Ave, Seaside Park, NJ (All Beach Block)",
             },
             {
               icon: (
@@ -66,7 +57,31 @@ export default function FacilitiesSection() {
                   <Trees className="w-6 h-6 text-emerald-500" />
                 </div>
               ),
-              name: "Large back yard for play time",
+              name: "Large Fenced-In Backyards",
+            },
+            {
+              icon: (
+                <div className="w-12 h-12 flex items-center justify-center bg-emerald-100 rounded-xl mb-3">
+                  <UtensilsCrossed className="w-6 h-6 text-emerald-500" />
+                </div>
+              ),
+              name: "Fully Stocked Kitchens",
+            },
+            {
+              icon: (
+                <div className="w-12 h-12 flex items-center justify-center bg-emerald-100 rounded-xl mb-3">
+                  <WashingMachine className="w-6 h-6 text-emerald-500" />
+                </div>
+              ),
+              name: "Washer and Dryer",
+            },
+            {
+              icon: (
+                <div className="w-12 h-12 flex items-center justify-center bg-emerald-100 rounded-xl mb-3">
+                  <Car className="w-6 h-6 text-emerald-500" />
+                </div>
+              ),
+              name: "Plenty of Off-Street Parking",
             },
             {
               icon: (
@@ -74,31 +89,15 @@ export default function FacilitiesSection() {
                   <Flame className="w-6 h-6 text-emerald-500" />
                 </div>
               ),
-              name: "Fire pit for night time enjoyment",
+              name: "Luxury Outdoor Seating Areas With Fire Pits",
             },
             {
               icon: (
                 <div className="w-12 h-12 flex items-center justify-center bg-emerald-100 rounded-xl mb-3">
-                  <Wifi className="w-6 h-6 text-emerald-500" />
+                  <Tv className="w-6 h-6 text-emerald-500" />
                 </div>
               ),
-              name: "High-speed internet connection",
-            },
-            {
-              icon: (
-                <div className="w-12 h-12 flex items-center justify-center bg-emerald-100 rounded-xl mb-3">
-                  <Wind className="w-6 h-6 text-emerald-500" />
-                </div>
-              ),
-              name: "Brand new central air conditioning",
-            },
-            {
-              icon: (
-                <div className="w-12 h-12 flex items-center justify-center bg-emerald-100 rounded-xl mb-3">
-                  <Washing className="w-6 h-6 text-emerald-500" />
-                </div>
-              ),
-              name: "Washer and dryer available",
+              name: "Smart TVs With High-Speed Internet",
             },
             {
               icon: (
@@ -106,7 +105,7 @@ export default function FacilitiesSection() {
                   <MoreHorizontal className="w-6 h-6 text-emerald-500" />
                 </div>
               ),
-              name: "Must More Feature",
+              name: "Many More Features",
             },
           ].map((facility, index) => (
             <div

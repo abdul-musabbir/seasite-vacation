@@ -1,5 +1,5 @@
 import { ArrowRight } from "lucide-react";
-import BackgroundImage from "../assets/seasidebeachvacation-flyview.jpg";
+import BackgroundImage from "../assets/Seasibebeachvacations_hero.jpg";
 function HeroSection() {
   return (
     <div

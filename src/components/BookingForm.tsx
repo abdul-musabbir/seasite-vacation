@@ -16,7 +16,7 @@ export default function BookingForm({ data }: { data: Listing }) {
   const [showCheckOutCalendar, setShowCheckOutCalendar] = useState(false);
   const [checkIn, setCheckIn] = useState<Date | null>(null);
   const [checkOut, setCheckOut] = useState<Date | null>(null);
-  const [adults, setAdults] = useState(2);
+  const [adults, setAdults] = useState(0);
   const [children, setChildren] = useState(0);
   const [pricing, setPricing] = useState<PricingDetails | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);

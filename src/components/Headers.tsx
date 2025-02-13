@@ -109,7 +109,7 @@ export default function Headers() {
                   }
                 )}
               >
-                House
+                Houses
                 <ChevronDown
                   className={cn(
                     "transition-all duration-150 md:group-hover:rotate-180",

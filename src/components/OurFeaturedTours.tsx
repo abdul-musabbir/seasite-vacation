@@ -90,19 +90,23 @@ export default function OurFeaturedTours() {
               className="bg-white rounded-xl overflow-hidden shadow-lg"
             >
               <div className="relative">
-                <img
-                  src={item?.feature_image || "default-image.jpg"} // Fallback image
-                  alt={item?.title || "No Title"}
-                  className="w-full h-64 object-cover"
-                />
+                <Link to={"/" + item.slug || "#"}>
+                  <img
+                    src={item?.feature_image || "default-image.jpg"} // Fallback image
+                    alt={item?.title || "No Title"}
+                    className="w-full h-64 object-cover"
+                  />
+                </Link>
                 <button className="absolute top-4 right-4 p-2 bg-white rounded-full">
                   <Heart className="w-5 h-5" />
                 </button>
               </div>
               <div className="p-6">
-                <h3 className="text-3xl font-bold mb-2">
-                  {item?.title || "No Title"}
-                </h3>
+                <Link to={"/" + item.slug || "#"}>
+                  <h3 className="text-3xl font-bold mb-2">
+                    {item?.title || "No Title"}
+                  </h3>
+                </Link>
                 <div className="flex items-center text-gray-600 mb-4">
                   <MapPin className="w-4 h-4 mr-1" />
                   <span>{item?.location || "Unknown Location"}</span>
@@ -137,7 +141,7 @@ export default function OurFeaturedTours() {
                     </span>
                   </div>
                   <Link
-                    to={item.slug || "#"} // Ensure the slug exists
+                    to={"/" + item.slug || "#"} // Ensure the slug exists
                     className="bg-black text-white px-4 py-2 rounded-full cursor-pointer"
                   >
                     Book Now

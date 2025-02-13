@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $mailUser->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mailUser->Port = 587;
             $mailUser->setFrom('midbox.io@gmail.com', 'Seaside Beatch Vacation');
-            $mailUser->addAddress("mdabdulmottalib12@gmail.com", $name);
+            $mailUser->addAddress($email, $name);
             $mailUser->isHTML(true);
             $mailUser->Subject = 'Here is the subject';
             $mailUser->Body = "Thank you for your interest in our vacation package. We will contact you soon.";

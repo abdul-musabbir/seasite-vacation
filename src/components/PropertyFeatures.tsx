@@ -1,25 +1,30 @@
 import {
   Car,
   Flame,
-  ShowerHead as Shower,
+  Home,
+  MapPin,
   Trees,
   Tv,
   UtensilsCrossed,
   WashingMachine as Washing,
-  Wifi,
-  Wind,
 } from "lucide-react";
-
+import MapPinHomeIcon from "./MapPinHomeIcon";
 const features = [
-  { icon: Shower, text: "Outdoor shower for beach days" },
-  { icon: Car, text: "Off-street parking" },
-  { icon: Tv, text: "Smart TV" },
-  { icon: UtensilsCrossed, text: "Full-size equipped kitchen" },
-  { icon: Trees, text: "Large backyard" },
-  { icon: Flame, text: "Fire pit" },
-  { icon: Wifi, text: "High-speed internet" },
-  { icon: Wind, text: "Central air conditioning" },
-  { icon: Washing, text: "Washer and dryer" },
+  { icon: Home, text: "3 Houses From Beach" },
+  {
+    icon: MapPinHomeIcon,
+    text: "If You Want Houses, They Are All Next to Each Other",
+  },
+  {
+    icon: MapPin,
+    text: "23, 29, and 30 Farragut Ave, Seaside Park, NJ (All Beach Block)",
+  },
+  { icon: Trees, text: "Large Fenced-In Backyards" },
+  { icon: UtensilsCrossed, text: "Fully Stocked Kitchens" },
+  { icon: Washing, text: "Washer and Dryer" },
+  { icon: Car, text: "Plenty of Off-Street Parking" },
+  { icon: Flame, text: "Luxury Outdoor Seating Areas With Fire Pits" },
+  { icon: Tv, text: "Smart TVs With High-Speed Internet" },
 ];
 
 export default function PropertyFeatures() {
