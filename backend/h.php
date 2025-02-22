@@ -2,7 +2,6 @@
 
 require "config.php"; // Database connection file
 
-
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 // Set timezone to New Jersey
@@ -12,6 +11,9 @@ date_default_timezone_set('America/New_York');
 $currentDateStr = date('d-m-Y');
 $currentDate = DateTime::createFromFormat('d-m-Y', $currentDateStr);
 
+// Get the 'id' parameter from the URL (if available)
+$listingId = isset($_GET['id']) ? $_GET['id'] : null;
+
 // ------------------------------------------------------------------
 // 1. Fetch Listings & Their Meta Data from listings and listings_meta
 // ------------------------------------------------------------------
@@ -20,6 +22,12 @@ $sql = "SELECT l.id, l.title, l.description, l.gallery_images, l.feature_image, 
         FROM listings l
         LEFT JOIN listings_meta lm ON l.id = lm.listing_id
         WHERE l.status = 'publish' AND l.deleted = 0";
+
+// If an 'id' is provided, filter by that specific listing
+if ($listingId) {
+    $sql .= " AND l.slug = '" . $conn->real_escape_string($listingId) . "'";
+}
+
 $result = $conn->query($sql);
 
 if (!$result) {
@@ -49,6 +57,12 @@ $sqlLocation = "SELECT lt.listing_id, t.name AS location
                 FROM listing_taxonomies lt 
                 JOIN taxonomies t ON lt.taxonomy_id = t.id 
                 WHERE t.taxonomy_type = 'location'";
+
+// If an 'id' is provided, filter by that specific listing
+if ($listingId) {
+    $sqlLocation .= " AND lt.listing_id IN (SELECT id FROM listings WHERE slug = '" . $conn->real_escape_string($listingId) . "')";
+}
+
 $resultLocation = $conn->query($sqlLocation);
 
 if (!$resultLocation) {

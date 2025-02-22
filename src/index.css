@@ -3,9 +3,22 @@
 @tailwind utilities;
 
 /*  */
-.swiper {
+.home-page-reviews {
   width: 100%;
+  /* height: 100%; */
   height: 370px !important;
+}
+
+@media (max-width: 550px) {
+  .home-page-reviews {
+    height: 350px !important;
+  }
+}
+
+@media only screen and (min-width: 550px) and (mix-width: 768px) {
+  .home-page-reviews {
+    height: 300px !important;
+  }
 }
 
 .swiper-slide {

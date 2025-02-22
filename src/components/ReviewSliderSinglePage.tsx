@@ -2,9 +2,18 @@ import { Star } from "lucide-react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { Autoplay, Keyboard, Mousewheel, Navigation } from "swiper/modules";
+import { Autoplay, Keyboard, Mousewheel } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { ReviewData } from "../lib/reviewdata";
+
+// Function to fetch review data based on home id
+const getReviewData = (homeId) => {
+  // Find the home with the matching id
+  const homeData = ReviewData.find((item) => item.home === homeId);
+
+  // Return the reviews for that home
+  return homeData ? homeData.reviews : [];
+};
 
 const ReviewCard = ({ data }) => {
   return (
@@ -24,13 +33,15 @@ const ReviewCard = ({ data }) => {
                 </div>
               </div>
 
-              {/* star */}
+              {/* Star rating */}
               <div className="flex gap-1 items-center">
-                <Star fill="yellow" className="text-amber-400 size-5" />
-                <Star fill="yellow" className="text-amber-400 size-5" />
-                <Star fill="yellow" className="text-amber-400 size-5" />
-                <Star fill="yellow" className="text-amber-400 size-5" />
-                <Star fill="yellow" className="text-amber-400 size-5" />
+                {[...Array(5)].map((_, index) => (
+                  <Star
+                    key={index}
+                    fill="yellow"
+                    className="text-amber-400 size-5"
+                  />
+                ))}
               </div>
             </div>
           </div>
@@ -40,25 +51,32 @@ const ReviewCard = ({ data }) => {
   );
 };
 
-export default function Slider() {
-  const allReviews = ReviewData.flatMap((home) => home.reviews);
+export default function ReviewSliderSinglePage({ homeId }) {
+  // Fetch the reviews for the specific home
+  const reviews = getReviewData(Number(homeId));
+
+  if (reviews.length === 0) {
+    return <div>No reviews found for this home.</div>; // Handle case when no reviews are found
+  }
 
   return (
     <Swiper
       cssMode={true}
-      navigation={true}
       mousewheel={true}
       keyboard={true}
       autoplay={{ delay: 2500, disableOnInteraction: false }}
       breakpoints={{
         640: { slidesPerView: 1, spaceBetween: 20 },
         768: { slidesPerView: 2, spaceBetween: 40 },
-        1280: { slidesPerView: 3, spaceBetween: 50 },
       }}
-      modules={[Navigation, Autoplay, Mousewheel, Keyboard]}
-      className="home-page-reviews"
+      modules={[Autoplay, Mousewheel, Keyboard]}
+      className="mySwiper"
+      style={{
+        height: "500px !important",
+      }}
     >
-      {allReviews.map((item, index) => (
+      {/* Map over the reviews for the given home */}
+      {reviews.map((item, index) => (
         <SwiperSlide key={index}>
           <ReviewCard data={item} />
         </SwiperSlide>

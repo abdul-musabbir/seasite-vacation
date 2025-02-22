@@ -97,7 +97,6 @@ export default function Headers() {
             <li className="group relative">
               <button
                 onClick={() => setShowDropDown(!showDropDown)}
-                id="dropdownNavbarLink"
                 className={cn(
                   "flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto py-4",
                   {

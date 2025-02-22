@@ -14,21 +14,21 @@ export default function HowToBook({
         <div className="grid grid-cols-2 gap-4 relative">
           <div className="col-span-2 ">
             <img
-              src="https://picsum.photos/id/243/1500/600"
+              src="https://seasidebeachvacations.com/images/beach-escape/1.jpg"
               alt="Temple view"
               className="w-full h-64 object-cover rounded-lg"
             />
           </div>
           <div>
             <img
-              src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+              src="https://seasidebeachvacations.com/images/ocean-oasis/1.jpg"
               alt="Travelers on cliff"
               className="w-full h-48 object-cover rounded-lg"
             />
           </div>
           <div>
             <img
-              src="https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+              src="https://seasidebeachvacations.com/images/unit-1/1.jpg"
               alt="Adventure jeep"
               className="w-full h-48 object-cover rounded-lg"
             />

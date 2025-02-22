@@ -25,7 +25,7 @@ const Headers = React.lazy(() => import("./components/Headers"));
 
 function App() {
   useEffect(() => {
-    document.title = "Seaside Beach Vacation";
+    document.title = "Seaside Beach Vacations";
   }, []);
 
   return (

@@ -8,7 +8,7 @@ export default function BookingGuideline() {
         <div className="relative md:order-2">
           <div className="aspect-[4/3] rounded-2xl overflow-hidden">
             <img
-              src="https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
+              src="https://seasidebeachvacations.com/images/unit-2/16.jpg"
               alt="Beach house"
               className="w-full h-full object-cover"
             />

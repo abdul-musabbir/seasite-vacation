@@ -16,9 +16,10 @@ interface DataType {
 
 interface DataContextType {
   data: DataType[] | null;
+  dataMap: Map<string, DataType> | null;
   loading: boolean;
   error: string | null;
-  getSingleData: (id: string) => DataType | undefined;
+  getSingleData: (id: string) => Promise<DataType | undefined>;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -29,6 +30,7 @@ interface DataProviderProps {
 
 export const DataProvider = ({ children }: DataProviderProps) => {
   const [data, setData] = useState<DataType[] | null>(null);
+  const [dataMap, setDataMap] = useState<Map<string, DataType> | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -40,7 +42,12 @@ export const DataProvider = ({ children }: DataProviderProps) => {
         );
         if (!response.ok) throw new Error("Failed to fetch data");
         const result: DataType[] = await response.json();
+
+        // Store data in an array and also create a Map for fast lookups
+        const dataMap = new Map(result.map((item) => [item.slug, item]));
+
         setData(result);
+        setDataMap(dataMap);
       } catch (err) {
         setError((err as Error).message);
       } finally {
@@ -50,12 +57,20 @@ export const DataProvider = ({ children }: DataProviderProps) => {
     fetchData();
   }, []);
 
-  // Function to fetch a single item by ID
-  const getSingleData = (id: string) => {
-    return data?.find((item) => item.slug === id);
+  // Fetch single item in O(1) time using Map, but now as a promise
+  const getSingleData = async (id: string) => {
+    try {
+      const response = await fetch(
+        `https://hello.seasidebeachvacations.com/listing-data.php?id=${id}`
+      );
+      if (!response.ok) throw new Error("Failed to fetch listing data");
+      return await response.json();
+    } catch (err) {
+      throw new Error((err as Error).message);
+    }
   };
 
-  const value = { data, loading, error, getSingleData };
+  const value = { data, dataMap, loading, error, getSingleData };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 };

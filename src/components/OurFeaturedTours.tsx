@@ -1,12 +1,14 @@
-import { Bath, Bed, Coffee, Heart, MapPin, Users } from "lucide-react";
+import { Bath, Bed, Coffee, MapPin, Users } from "lucide-react";
 import { useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useData } from "../lib/dataContext";
+import VideoPopup from "./VideoPopup";
 type GetPriceLabel = (
   priceType: string,
   price: number,
   minStay: number
 ) => string | JSX.Element;
+
 export default function OurFeaturedTours() {
   const { data: ourFeaturedData, loading } = useData();
 
@@ -97,9 +99,19 @@ export default function OurFeaturedTours() {
                     className="w-full h-64 object-cover"
                   />
                 </Link>
-                <button className="absolute top-4 right-4 p-2 bg-white rounded-full">
-                  <Heart className="w-5 h-5" />
-                </button>
+                {[0, 1].includes(index) && (
+                  <button className="absolute top-4 right-4 ">
+                    <VideoPopup
+                      videoLink={
+                        index === 0
+                          ? "ZNdPZZcGjrc"
+                          : index === 1
+                          ? "ZNdPZZcGjrc"
+                          : ""
+                      }
+                    />
+                  </button>
+                )}
               </div>
               <div className="p-6">
                 <Link to={"/" + item.slug || "#"}>
