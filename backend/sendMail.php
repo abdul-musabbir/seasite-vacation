@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
             $mail->Username = 'midbox.io@gmail.com';
-            $mail->Password = 'kzgssjgntljmemgo';
+            $mail->Password = 'xpnffjjsdpwdvrfu';
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
             $mail->setFrom('midbox.io@gmail.com', 'Seaside Beatch Vacation');
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $mailUser->Host = 'smtp.gmail.com';
             $mailUser->SMTPAuth = true;
             $mailUser->Username = 'midbox.io@gmail.com';
-            $mailUser->Password = 'kzgssjgntljmemgo'; // SMTP password
+            $mailUser->Password = 'xpnffjjsdpwdvrfu'; // SMTP password
             $mailUser->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mailUser->Port = 587;
             $mailUser->setFrom('midbox.io@gmail.com', 'Seaside Beatch Vacation');
